@@ -11,6 +11,8 @@ import Foundation
 class UserStore {
     static let shared = UserStore()
     
+    var user: User?
+    
     func login(loginUser: User, completion:(success: Bool, error: String?) -> Void) {
         WebServices.shared.authUser(loginUser) { (user, error) -> () in
             if let user = user {

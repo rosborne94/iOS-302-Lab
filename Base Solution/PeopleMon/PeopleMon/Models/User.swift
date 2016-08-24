@@ -11,10 +11,17 @@ import Alamofire
 import SwiftyJSON
 
 class User: NetworkModel {
-    var id: Int?
-    var username: String?
     var email: String?
+    var fullName: String?
+    var avatar: String?
     var password: String?
+    var apiKey: String?
+    
+    var hasRegistered = false
+    var loginProvider: String?
+    var latitude: Double?
+    var longitude: Double?
+    
     var token: String?
     var expirationDate: String?
     
@@ -23,6 +30,8 @@ class User: NetworkModel {
     enum RequestType {
         case Login
         case Register
+        case Logout
+        case UserInfo
     }
     
     init() {}
@@ -30,46 +39,67 @@ class User: NetworkModel {
     required init(json: JSON) {
         token = json[Constants.User.token].string
         expirationDate = json[Constants.User.expirationDate].string
+        
+        email = json[Constants.User.email].string
+        hasRegistered = json[Constants.User.hasRegistered].boolValue
+        loginProvider = json[Constants.User.loginProvider].string
+        fullName = json[Constants.User.fullName].string
+        avatar = json[Constants.User.avatarBase64].string
+        latitude = json[Constants.User.latitude].double
+        longitude = json[Constants.User.longitude].double
     }
     
-    init(username: String, password: String) {
-        self.username = username
+    init(email: String, password: String) {
+        self.email = email
         self.password = password
         requestType = .Login
     }
     
-    init(username: String, password: String, email: String) {
-        self.username = username
-        self.password = password
+    init(email: String, password: String, fullName: String, profilePhotoUrl: String) {
         self.email = email
+        self.password = password
+        self.fullName = fullName
+        self.avatar = profilePhotoUrl
+        self.apiKey = NSUUID().UUIDString
         requestType = .Register
     }
     
-    init(id: Int) {
-        self.id = id
-    }
-    
     func method() -> Alamofire.Method {
-        return .POST
+        switch requestType {
+        case .UserInfo:
+            return .GET
+        default:
+            return .POST
+        }
     }
     
     func path() -> String {
         switch requestType {
         case .Login:
-            return "/auth"
+            return "/token"
         case .Register:
-            return "/register"
+            return "/api/Account/Register"
+        case .Logout:
+            return "/api/Account/Logout"
+        case .UserInfo:
+            return "/api/Account/UserInfo"
         }
     }
     
     func toDictionary() -> [String: AnyObject]? {
         var params: [String: AnyObject] = [:]
-        params[Constants.User.username] = username
-        params[Constants.User.password] = password
         
         switch requestType {
         case .Register:
             params[Constants.User.email] = email
+            params[Constants.User.fullName] = fullName
+            params[Constants.User.profileImage] = avatar
+            params[Constants.User.apiKey] = self.apiKey
+            params[Constants.User.password] = password
+        case .Login:
+            params[Constants.User.username] = email
+            params["password"] = password
+            params[Constants.User.grantType] = "password"
         default:
             break
         }

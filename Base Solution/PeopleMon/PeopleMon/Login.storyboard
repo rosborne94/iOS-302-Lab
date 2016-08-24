@@ -48,7 +48,7 @@
                                     <segue destination="WmI-FT-pT7" kind="show" id="dQv-rq-SGq"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KTl-LV-X6a">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KTl-LV-X6a">
                                 <rect key="frame" x="200" y="72" width="200" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="1mR-Pn-TIV"/>
@@ -72,8 +72,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="x8B-fL-am0"/>
                     <connections>
+                        <outlet property="emailTextField" destination="KTl-LV-X6a" id="eiN-r9-HQF"/>
                         <outlet property="passwordTextField" destination="VQ4-W7-EAx" id="flZ-Cv-mJG"/>
-                        <outlet property="usernameTextField" destination="KTl-LV-X6a" id="ScU-qI-9EM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fSA-jr-Vp5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -92,7 +92,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="29k-xR-Mop">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Full Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="29k-xR-Mop">
                                 <rect key="frame" x="200" y="72" width="200" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="YZA-a8-L28"/>
@@ -157,8 +157,8 @@
                     <connections>
                         <outlet property="confirmTextField" destination="7wx-W3-O0Y" id="pwY-cK-Z13"/>
                         <outlet property="emailTextField" destination="How-t5-Gm8" id="cni-g8-Puy"/>
+                        <outlet property="fullNameTextField" destination="29k-xR-Mop" id="VkQ-6d-8xI"/>
                         <outlet property="passwordTextField" destination="5oR-jg-Rij" id="HzA-wz-nrc"/>
-                        <outlet property="usernameTextField" destination="29k-xR-Mop" id="PcS-yf-Y3h"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="42w-l9-GVn" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -19,6 +19,12 @@
 		F1019F681D64F2EB0049CC3B /* SegueHandlerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1019F671D64F2EB0049CC3B /* SegueHandlerType.swift */; };
 		F1019F6A1D64F5270049CC3B /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1019F691D64F5270049CC3B /* Utils.swift */; };
 		F1019F6C1D64F5460049CC3B /* UserStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1019F6B1D64F5460049CC3B /* UserStore.swift */; };
+		F113A23A1D6DDDA500FE2A1D /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113A2391D6DDDA500FE2A1D /* Person.swift */; };
+		F113A23D1D6E1ADD00FE2A1D /* PersonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113A23C1D6E1ADD00FE2A1D /* PersonCell.swift */; };
+		F113A23F1D6E302F00FE2A1D /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113A23E1D6E302F00FE2A1D /* CircleImage.swift */; };
+		F113A2411D6E337200FE2A1D /* MapPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113A2401D6E337200FE2A1D /* MapPin.swift */; };
+		F113A2431D6E384500FE2A1D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113A2421D6E384500FE2A1D /* ProfileViewController.swift */; };
+		F113A2451D6E386200FE2A1D /* CaughtViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113A2441D6E386200FE2A1D /* CaughtViewController.swift */; };
 		F1E3CD2A1D64DFC400131773 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E3CD291D64DFC400131773 /* AppDelegate.swift */; };
 		F1E3CD2C1D64DFC400131773 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E3CD2B1D64DFC400131773 /* MapViewController.swift */; };
 		F1E3CD2F1D64DFC400131773 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1E3CD2D1D64DFC400131773 /* Main.storyboard */; };
@@ -41,6 +47,12 @@
 		F1019F671D64F2EB0049CC3B /* SegueHandlerType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueHandlerType.swift; sourceTree = "<group>"; };
 		F1019F691D64F5270049CC3B /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		F1019F6B1D64F5460049CC3B /* UserStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserStore.swift; sourceTree = "<group>"; };
+		F113A2391D6DDDA500FE2A1D /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Person.swift; path = Models/Person.swift; sourceTree = "<group>"; };
+		F113A23C1D6E1ADD00FE2A1D /* PersonCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonCell.swift; path = "View Controllers/Table Cells/PersonCell.swift"; sourceTree = "<group>"; };
+		F113A23E1D6E302F00FE2A1D /* CircleImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CircleImage.swift; path = Components/CircleImage.swift; sourceTree = "<group>"; };
+		F113A2401D6E337200FE2A1D /* MapPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapPin.swift; path = Components/MapPin.swift; sourceTree = "<group>"; };
+		F113A2421D6E384500FE2A1D /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = "View Controllers/ProfileViewController.swift"; sourceTree = "<group>"; };
+		F113A2441D6E386200FE2A1D /* CaughtViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CaughtViewController.swift; path = "View Controllers/CaughtViewController.swift"; sourceTree = "<group>"; };
 		F1E3CD261D64DFC400131773 /* PeopleMon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PeopleMon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1E3CD291D64DFC400131773 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F1E3CD2B1D64DFC400131773 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapViewController.swift; path = "View Controllers/MapViewController.swift"; sourceTree = "<group>"; };
@@ -86,8 +98,18 @@
 				F1019F671D64F2EB0049CC3B /* SegueHandlerType.swift */,
 				F1019F6B1D64F5460049CC3B /* UserStore.swift */,
 				F1019F691D64F5270049CC3B /* Utils.swift */,
+				F113A23E1D6E302F00FE2A1D /* CircleImage.swift */,
+				F113A2401D6E337200FE2A1D /* MapPin.swift */,
 			);
 			name = Components;
+			sourceTree = "<group>";
+		};
+		F113A23B1D6E1AC300FE2A1D /* Table Cells */ = {
+			isa = PBXGroup;
+			children = (
+				F113A23C1D6E1ADD00FE2A1D /* PersonCell.swift */,
+			);
+			name = "Table Cells";
 			sourceTree = "<group>";
 		};
 		F1E3CD1D1D64DFC400131773 = {
@@ -127,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				F1019F5C1D64E5ED0049CC3B /* User.swift */,
+				F113A2391D6DDDA500FE2A1D /* Person.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -154,9 +177,12 @@
 		F1E3CD3E1D64E2B100131773 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				F113A23B1D6E1AC300FE2A1D /* Table Cells */,
 				F1019F631D64F16E0049CC3B /* LoginViewController.swift */,
 				F1019F641D64F16E0049CC3B /* RegisterViewController.swift */,
 				F1E3CD2B1D64DFC400131773 /* MapViewController.swift */,
+				F113A2421D6E384500FE2A1D /* ProfileViewController.swift */,
+				F113A2441D6E386200FE2A1D /* CaughtViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -290,12 +316,18 @@
 				F1019F5D1D64E5ED0049CC3B /* User.swift in Sources */,
 				F1019F5B1D64E5470049CC3B /* WebservicesExtension.swift in Sources */,
 				F1019F651D64F16E0049CC3B /* LoginViewController.swift in Sources */,
+				F113A23D1D6E1ADD00FE2A1D /* PersonCell.swift in Sources */,
+				F113A2431D6E384500FE2A1D /* ProfileViewController.swift in Sources */,
 				F1019F6C1D64F5460049CC3B /* UserStore.swift in Sources */,
 				F1019F601D64EF0D0049CC3B /* Constants.swift in Sources */,
 				F1019F6A1D64F5270049CC3B /* Utils.swift in Sources */,
 				F1019F5A1D64E5470049CC3B /* WebServices.swift in Sources */,
+				F113A23A1D6DDDA500FE2A1D /* Person.swift in Sources */,
+				F113A2411D6E337200FE2A1D /* MapPin.swift in Sources */,
 				F1019F681D64F2EB0049CC3B /* SegueHandlerType.swift in Sources */,
 				F1E3CD2A1D64DFC400131773 /* AppDelegate.swift in Sources */,
+				F113A2451D6E386200FE2A1D /* CaughtViewController.swift in Sources */,
+				F113A23F1D6E302F00FE2A1D /* CircleImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

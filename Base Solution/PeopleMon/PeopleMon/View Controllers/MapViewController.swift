@@ -16,8 +16,10 @@ class MapViewController: UIViewController, SegueHandlerType {
     let latitudeDelta = 0.2
     let longitudeDelta = 0.2
     
-    var annotations: [MKPointAnnotation] = []
+    var annotations: [MapPin] = []
     var overlay: MKOverlay?
+    
+    var timer: NSTimer?
     
     enum SegueIdentifier: String {
         case PresentLoginNoAnimation
@@ -46,11 +48,33 @@ class MapViewController: UIViewController, SegueHandlerType {
         if !WebServices.shared.userAuthTokenExists() || WebServices.shared.userAuthTokenExpired() {
             performSegueWithIdentifier(.PresentLoginNoAnimation, sender: self)
         } else {
-            loadMap()
+            timer = NSTimer(timeInterval: 5.0, target: self, selector: #selector(loadMap), userInfo: nil, repeats: true)
         }
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        timer?.invalidate()
+        timer = nil
+    }
+    
     func loadMap() {
+        let nearby = Person(radius: 50)
+        WebServices.shared.getObjects(nearby) { (objects, error) in
+            if let objects = objects {
+                self.mapView.removeAnnotations(self.annotations)
+                self.annotations = []
+                for person in objects {
+                    let pin = MapPin(person: person)
+                    self.annotations.append(pin)
+                }
+                self.mapView.addAnnotations(self.annotations)
+            }
+        }
+    }
+    
+    
+    // MARK: - IBActions
+    @IBAction func checkIn(sender: AnyObject) {
         
     }
 }
@@ -78,7 +102,7 @@ extension MapViewController: MKMapViewDelegate {
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = false
-            pinView!.animatesDrop = true
+            pinView!.animatesDrop = false
         } else {
             pinView!.annotation = annotation
         }

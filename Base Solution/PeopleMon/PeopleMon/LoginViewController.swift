@@ -10,7 +10,7 @@ import UIKit
 import MBProgressHUD
 
 class LoginViewController: UIViewController {
-    @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
 
     override func viewDidLoad() {
@@ -22,8 +22,8 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func loginTapped(sender: AnyObject) {
-        guard let username = usernameTextField.text where username != "" else {
-            presentViewController(Utils.createAlert("Login Error", message: "Please provide a username"), animated: true, completion: nil)
+        guard let email = emailTextField.text where email != "" else {
+            presentViewController(Utils.createAlert("Login Error", message: "Please provide your email"), animated: true, completion: nil)
             return
         }
         
@@ -33,7 +33,7 @@ class LoginViewController: UIViewController {
         }
         
         MBProgressHUD.showHUDAddedTo(view, animated: true)
-        let user = User(username: username, password: password)
+        let user = User(email: email, password: password)
         UserStore.shared.login(user) { (success, error) in
             MBProgressHUD.hideHUDForView(self.view, animated: true)
             if success {

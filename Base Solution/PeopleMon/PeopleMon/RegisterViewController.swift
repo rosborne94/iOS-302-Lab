@@ -10,7 +10,7 @@ import UIKit
 import MBProgressHUD
 
 class RegisterViewController: UIViewController {
-    @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var fullNameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var confirmTextField: UITextField!
@@ -24,8 +24,8 @@ class RegisterViewController: UIViewController {
     }
     
     @IBAction func registerTapped(sender: AnyObject) {
-        guard let username = usernameTextField.text where username != "" else {
-            presentViewController(Utils.createAlert("Login Error", message: "Please provide a username"), animated: true, completion: nil)
+        guard let fullName = fullNameTextField.text where fullName != "" else {
+            presentViewController(Utils.createAlert("Login Error", message: "Please provide your name"), animated: true, completion: nil)
             return
         }
         
@@ -46,7 +46,7 @@ class RegisterViewController: UIViewController {
         
         MBProgressHUD.showHUDAddedTo(view, animated: true)
         
-        let user = User(username: username, password: password, email: email)
+        let user = User(email: email, password: password, fullName: fullName, profilePhotoUrl: "")
         UserStore.shared.login(user) { (success, error) in
             MBProgressHUD.hideHUDForView(self.view, animated: true)
             if success {
