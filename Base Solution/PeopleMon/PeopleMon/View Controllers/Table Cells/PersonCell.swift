@@ -24,5 +24,10 @@ class PersonCell: UITableViewCell {
             let date = NSDate(fromString: createdDate, format: .ISO8601(nil))
             dateLabel.text = date.toString(format: .Custom("M/d/yyyy h:m:s a"))
         }
+        if let image = Utils.imageFromString(person.avatar) {
+            avatar.image = image
+        } else {
+            avatar.image = Images.Avatar.image()
+        }
     }
 }

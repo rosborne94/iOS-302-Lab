@@ -68,7 +68,14 @@ class MapViewController: UIViewController, SegueHandlerType {
     }
     
     func loadMap() {
-        let nearby = Person(radius: 500)
+        if let coordinate = locationManager.location?.coordinate {
+            let checkIn = Person(coordinate: coordinate)
+            WebServices.shared.postObject(checkIn, completion: { (object, error) in
+                
+            })
+        }
+        
+        let nearby = Person(radius: Constants.radius)
         WebServices.shared.getObjects(nearby) { (objects, error) in
             if let objects = objects {
                 let oldAnnotations = self.annotations
@@ -84,7 +91,7 @@ class MapViewController: UIViewController, SegueHandlerType {
     }
     
     func startTimer() {
-        timer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(loadMap), userInfo: nil, repeats: true)
+        timer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: #selector(loadMap), userInfo: nil, repeats: true)
     }
     
     func stopTimer() {
@@ -94,15 +101,6 @@ class MapViewController: UIViewController, SegueHandlerType {
     
     
     // MARK: - IBActions
-    @IBAction func checkIn(sender: AnyObject) {
-        if let coordinate = locationManager.location?.coordinate {
-            let checkIn = Person(coordinate: coordinate)
-            WebServices.shared.postObject(checkIn, completion: { (object, error) in
-                
-            })
-        }
-    }
-    
     @IBAction func logout(sender: AnyObject) {
         UserStore.shared.logout { 
             self.performSegueWithIdentifier(.PresentLogin, sender: self)
@@ -143,16 +141,17 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        if let mapPin = view.annotation as? MapPin, person = mapPin.person, name = person.username {
+        if let mapPin = view.annotation as? MapPin, person = mapPin.person, name = person.username, userId = person.userId {
             let alert = UIAlertController(title: "Catch User", message: "Catch \(name)?", preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "Catch", style: .Default, handler: { (action) in
-                if let currentLocation = self.locationManager.location, catchLatitude = person.latitude, catchLongitude = person.longitude {
-                    let distance = currentLocation.distanceFromLocation(CLLocation(latitude: catchLatitude, longitude: catchLongitude))
-                    let catchPerson = Person(userId: person.userId!, radius: 500)
-                    WebServices.shared.postObject(catchPerson, completion: { (object, error) in
-                        
-                    })
-                }
+                let catchPerson = Person(userId: userId, radius: Constants.radius)
+                WebServices.shared.postObject(catchPerson, completion: { (object, error) in
+                    if let error = error {
+                        self.presentViewController(Utils.createAlert(message: error), animated: true, completion: nil)
+                    } else {
+                        self.presentViewController(Utils.createAlert(message: "User Caught"), animated: true, completion: nil)
+                    }
+                })
             }))
             alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
