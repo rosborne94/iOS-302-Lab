@@ -32,9 +32,12 @@ class User: NetworkModel {
         case Register
         case Logout
         case UserInfo
+        case UpdateProfile
     }
     
-    init() {}
+    init() {
+        requestType = .UserInfo
+    }
     
     required init(json: JSON) {
         token = json[Constants.User.token].string
@@ -55,13 +58,18 @@ class User: NetworkModel {
         requestType = .Login
     }
     
-    init(email: String, password: String, fullName: String, profilePhotoUrl: String) {
+    init(email: String, password: String, fullName: String) {
         self.email = email
         self.password = password
         self.fullName = fullName
-        self.avatar = profilePhotoUrl
-        self.apiKey = NSUUID().UUIDString
+        self.apiKey = Constants.apiKey
         requestType = .Register
+    }
+    
+    init(fullName: String, avatar: String) {
+        self.fullName = fullName
+        self.avatar = avatar
+        requestType = .UpdateProfile
     }
     
     func method() -> Alamofire.Method {
@@ -81,7 +89,7 @@ class User: NetworkModel {
             return "/api/Account/Register"
         case .Logout:
             return "/api/Account/Logout"
-        case .UserInfo:
+        case .UserInfo, .UpdateProfile:
             return "/api/Account/UserInfo"
         }
     }
@@ -98,8 +106,11 @@ class User: NetworkModel {
             params[Constants.User.password] = password
         case .Login:
             params[Constants.User.username] = email
-            params["password"] = password
-            params[Constants.User.grantType] = "password"
+            params[Constants.User.password] = password
+            params[Constants.User.grantType] = Constants.User.password
+        case .UpdateProfile:
+            params[Constants.User.fullName] = fullName
+            params[Constants.User.avatarBase64] = avatar
         default:
             break
         }

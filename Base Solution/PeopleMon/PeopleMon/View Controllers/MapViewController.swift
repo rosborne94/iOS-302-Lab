@@ -18,6 +18,7 @@ class MapViewController: UIViewController, SegueHandlerType {
     
     var annotations: [MapPin] = []
     var overlay: MKOverlay?
+    var firstLocation = true
     
     var timer: NSTimer?
     
@@ -38,6 +39,8 @@ class MapViewController: UIViewController, SegueHandlerType {
         locationManager.startUpdatingLocation()
         
         mapView.delegate = self
+        
+        UserStore.shared.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -48,13 +51,18 @@ class MapViewController: UIViewController, SegueHandlerType {
         if !WebServices.shared.userAuthTokenExists() || WebServices.shared.userAuthTokenExpired() {
             performSegueWithIdentifier(.PresentLoginNoAnimation, sender: self)
         } else {
-            timer = NSTimer(timeInterval: 5.0, target: self, selector: #selector(loadMap), userInfo: nil, repeats: true)
+            let infoUser = User()
+            WebServices.shared.getObject(infoUser, completion: { (user, error) in
+                if let user = user {
+                    UserStore.shared.user = user
+                }
+            })
         }
     }
     
     override func viewWillDisappear(animated: Bool) {
-        timer?.invalidate()
-        timer = nil
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        stopTimer()
     }
     
     func loadMap() {
@@ -72,10 +80,30 @@ class MapViewController: UIViewController, SegueHandlerType {
         }
     }
     
+    func startTimer() {
+        timer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(loadMap), userInfo: nil, repeats: true)
+    }
+    
+    func stopTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
+    
     
     // MARK: - IBActions
     @IBAction func checkIn(sender: AnyObject) {
-        
+        if let coordinate = locationManager.location?.coordinate {
+            let checkIn = Person(coordinate: coordinate)
+            WebServices.shared.postObject(checkIn, completion: { (object, error) in
+                
+            })
+        }
+    }
+    
+    @IBAction func logout(sender: AnyObject) {
+        UserStore.shared.logout { 
+            self.performSegueWithIdentifier(.PresentLogin, sender: self)
+        }
     }
 }
 
@@ -85,6 +113,7 @@ extension MapViewController: CLLocationManagerDelegate {
         let location = locations.last!
         let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpanMake(latitudeDelta, longitudeDelta))
+        
         self.mapView.setRegion(region, animated: true)
     }
 }
@@ -117,5 +146,15 @@ extension MapViewController: MKMapViewDelegate {
         renderer.lineWidth = 5.0
         renderer.lineCap = CGLineCap.Round
         return renderer
+    }
+}
+
+// MARK: - UserStoreDelegate
+extension MapViewController: UserStoreDelegate {
+    func userLoggedIn() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(stopTimer), name: UIApplicationWillResignActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(startTimer), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        stopTimer()
+        startTimer()
     }
 }

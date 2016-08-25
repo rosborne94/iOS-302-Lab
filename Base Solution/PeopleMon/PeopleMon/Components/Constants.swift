@@ -9,6 +9,8 @@
 import UIKit
 
 struct Constants {
+    static let apiKey = "ios301november2016"
+    
     struct JSON {
         static let badRequest = "Bad Request"
         static let unknownError = "An Unknown Error Has Occurred"
@@ -21,13 +23,13 @@ struct Constants {
     struct User {
         static let email = "Email"
         static let fullName = "FullName"
-        static let password = "Password"
+        static let password = "password"
         static let apiKey = "ApiKey"
         static let profileImage = "ProfileBase64Image"
         static let username = "username"
         static let grantType = "grant_type"
-        static let token = "token"
-        static let expirationDate = "expiration"
+        static let token = "access_token"
+        static let expirationDate = ".expires"
         static let hasRegistered = "HasRegistered"
         static let loginProvider = "LoginProvider"
         static let avatarBase64 = "AvatarBase64"
@@ -41,7 +43,7 @@ struct Constants {
         static let latitude = "Latitude"
         static let longitude = "Longitude"
         static let created = "Created"
-        static let radius = "RadiusInMeters"
+        static let radius = "radiusInMeters"
         static let caughtUserId = "CaughtUserId"
     }
 }

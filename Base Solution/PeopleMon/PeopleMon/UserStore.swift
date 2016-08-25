@@ -8,16 +8,27 @@
 
 import Foundation
 
+protocol UserStoreDelegate: class {
+    func userLoggedIn()
+}
+
 class UserStore {
     static let shared = UserStore()
     
-    var user: User?
+    var user: User? {
+        didSet {
+            if let _ = user {
+                delegate?.userLoggedIn()
+            }
+        }
+    }
+    weak var delegate: UserStoreDelegate?
     
     func login(loginUser: User, completion:(success: Bool, error: String?) -> Void) {
         WebServices.shared.authUser(loginUser) { (user, error) -> () in
             if let user = user {
                 WebServices.shared.setAuthToken(user.token, expiration: user.expirationDate)
-                completion(success: true, error: nil)
+                self.getUserInfo(loginUser, completion: completion)
             } else {
                 completion(success: false, error: error)
             }
@@ -26,8 +37,22 @@ class UserStore {
     
     func register(registerUser: User, completion:(success: Bool, error: String?) -> Void) {
         WebServices.shared.registerUser(registerUser) { (user, error) -> () in
+            if let _ = user {
+                registerUser.requestType = User.RequestType.Login
+                self.login(registerUser, completion: { (success, error) in
+                    completion(success: success, error: error)
+                })
+            } else {
+                completion(success: false, error: error)
+            }
+        }
+    }
+    
+    func getUserInfo(infoUser: User, completion:(success: Bool, error: String?) -> Void) {
+        infoUser.requestType = User.RequestType.UserInfo
+        WebServices.shared.getObject(infoUser) { (user, error) in
             if let user = user {
-                WebServices.shared.setAuthToken(user.token, expiration: user.expirationDate)
+                self.user = user
                 completion(success: true, error: nil)
             } else {
                 completion(success: false, error: error)
@@ -36,7 +61,11 @@ class UserStore {
     }
     
     func logout(completion:() -> Void) {
-        WebServices.shared.clearUserAuthToken()
-        completion()
+        let logoutUser = User()
+        logoutUser.requestType = User.RequestType.Logout
+        WebServices.shared.postObject(logoutUser) { (object, error) in
+            WebServices.shared.clearUserAuthToken()
+            completion()
+        }
     }
 }

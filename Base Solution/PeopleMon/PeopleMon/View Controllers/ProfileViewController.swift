@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class ProfileViewController: UIViewController {
     @IBOutlet weak var avatar: CircleImage!
@@ -40,12 +41,21 @@ class ProfileViewController: UIViewController {
             return
         }
         
-        let imageString = Utils.stringFromImage(avatar.image)
-        let user = User()
-        user.fullName = name
-        user.avatar = imageString
+        let resizedImage = Utils.resizeImage(avatar.image!)
+        let imageString = Utils.stringFromImage(resizedImage)
+        print(imageString.characters.count)
+        let user = User(fullName: name, avatar: imageString)
         
-        // TODO: call endpoint once it's available
+        MBProgressHUD.showHUDAddedTo(view, animated: true)
+        WebServices.shared.postObject(user) { (updatedUser, error) in
+            MBProgressHUD.hideHUDForView(self.view, animated: true)
+            if let error = error {
+                self.presentViewController(Utils.createAlert(message: error), animated: true, completion: nil)
+            } else {
+                UserStore.shared.user?.fullName = name
+                UserStore.shared.user?.avatar = imageString
+            }
+        }
     }
 }
 

@@ -76,7 +76,7 @@ class WebServices: NSObject {
     func userAuthTokenExpired() -> Bool {
         if let expireDateString = self.authTokenExpireDate {
             
-            let expireDate = NSDate(fromString: expireDateString, format: .ISO8601(nil))
+            let expireDate = NSDate(fromString: expireDateString, format: .Custom("EEE, dd MMM yyyy HH:mm:ss Z"))
             
             let hourFromNow = NSDate().dateByAddingTimeInterval(3600)
             

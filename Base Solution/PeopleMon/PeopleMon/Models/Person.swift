@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import MapKit
 
 class Person: NetworkModel {
     var userId: String?
@@ -34,7 +35,14 @@ class Person: NetworkModel {
     }
     
     init(radius: Double) {
+        self.requestType = .Nearby
         self.radius = radius
+    }
+    
+    init(coordinate: CLLocationCoordinate2D) {
+        self.requestType = .CheckIn
+        self.latitude = coordinate.latitude
+        self.longitude = coordinate.longitude
     }
     
     func method() -> Alamofire.Method {

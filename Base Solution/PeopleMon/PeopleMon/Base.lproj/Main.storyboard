@@ -35,20 +35,27 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="k4j-w5-nRU">
-                        <barButtonItem key="leftBarButtonItem" title="Check In" id="p1C-cL-emf">
-                            <connections>
-                                <action selector="checkIn:" destination="BYZ-38-t0r" id="u3c-ti-3sC"/>
-                            </connections>
-                        </barButtonItem>
-                        <rightBarButtonItems>
-                            <barButtonItem title="Caught" id="Pu7-vu-E4A">
+                        <leftBarButtonItems>
+                            <barButtonItem image="Logout" id="0My-g6-RI5">
                                 <connections>
-                                    <segue destination="zhV-sj-kam" kind="presentation" id="5tt-1E-kTn"/>
+                                    <action selector="logout:" destination="BYZ-38-t0r" id="Doo-M0-JJH"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Profile" id="TlL-7F-Q3O">
+                            <barButtonItem image="CheckIn" id="p1C-cL-emf">
+                                <connections>
+                                    <action selector="checkIn:" destination="BYZ-38-t0r" id="u3c-ti-3sC"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
+                        <rightBarButtonItems>
+                            <barButtonItem image="Profile" id="TlL-7F-Q3O">
                                 <connections>
                                     <segue destination="xdz-4e-fL2" kind="show" id="TCb-Hp-bUH"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="Caught" id="Pu7-vu-E4A">
+                                <connections>
+                                    <segue destination="zhV-sj-kam" kind="presentation" id="5tt-1E-kTn"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -263,7 +270,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="JTk-6w-XUQ">
-                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="C6S-gZ-DrV"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="C6S-gZ-DrV">
+                            <connections>
+                                <action selector="close:" destination="Vs5-1M-E8g" id="781-z8-9T9"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ckl-cK-h3Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -271,6 +282,12 @@
             <point key="canvasLocation" x="2032" y="-405"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Caught" width="25" height="25"/>
+        <image name="CheckIn" width="25" height="25"/>
+        <image name="Logout" width="25" height="25"/>
+        <image name="Profile" width="25" height="25"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="4ww-kc-qZU"/>
     </inferredMetricsTieBreakers>
