@@ -13,8 +13,8 @@ class MapViewController: UIViewController, SegueHandlerType {
     @IBOutlet weak var mapView: MKMapView!
     
     let locationManager = CLLocationManager()
-    let latitudeDelta = 0.2
-    let longitudeDelta = 0.2
+    let latitudeDelta = 0.005
+    let longitudeDelta = 0.005
     
     var annotations: [MapPin] = []
     var overlay: MKOverlay?
@@ -36,6 +36,8 @@ class MapViewController: UIViewController, SegueHandlerType {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         mapView.showsUserLocation = true
+        mapView.zoomEnabled = false
+        mapView.scrollEnabled = false
         locationManager.startUpdatingLocation()
         
         mapView.delegate = self
@@ -66,16 +68,17 @@ class MapViewController: UIViewController, SegueHandlerType {
     }
     
     func loadMap() {
-        let nearby = Person(radius: 50)
+        let nearby = Person(radius: 500)
         WebServices.shared.getObjects(nearby) { (objects, error) in
             if let objects = objects {
-                self.mapView.removeAnnotations(self.annotations)
+                let oldAnnotations = self.annotations
                 self.annotations = []
                 for person in objects {
                     let pin = MapPin(person: person)
                     self.annotations.append(pin)
                 }
                 self.mapView.addAnnotations(self.annotations)
+                self.mapView.removeAnnotations(oldAnnotations)
             }
         }
     }
@@ -137,6 +140,23 @@ extension MapViewController: MKMapViewDelegate {
         }
         
         return pinView
+    }
+    
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+        if let mapPin = view.annotation as? MapPin, person = mapPin.person, name = person.username {
+            let alert = UIAlertController(title: "Catch User", message: "Catch \(name)?", preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Catch", style: .Default, handler: { (action) in
+                if let currentLocation = self.locationManager.location, catchLatitude = person.latitude, catchLongitude = person.longitude {
+                    let distance = currentLocation.distanceFromLocation(CLLocation(latitude: catchLatitude, longitude: catchLongitude))
+                    let catchPerson = Person(userId: person.userId!, radius: 500)
+                    WebServices.shared.postObject(catchPerson, completion: { (object, error) in
+                        
+                    })
+                }
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     }
     
     func mapView(mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {

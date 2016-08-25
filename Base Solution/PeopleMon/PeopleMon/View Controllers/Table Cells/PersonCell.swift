@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import AFDateHelper
 
 class PersonCell: UITableViewCell {
     @IBOutlet weak var avatar: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var caughtLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
     
     var person: Person!
     
@@ -19,6 +20,9 @@ class PersonCell: UITableViewCell {
         self.person = person
         
         nameLabel.text = person.username
-        
+        if let createdDate = person.created {
+            let date = NSDate(fromString: createdDate, format: .ISO8601(nil))
+            dateLabel.text = date.toString(format: .Custom("M/d/yyyy h:m:s a"))
+        }
     }
 }

@@ -14,12 +14,13 @@ import MapKit
 class Person: NetworkModel {
     var userId: String?
     var username: String?
+    var avatar: String?
     var latitude: Double?
     var longitude: Double?
-    var created: NSDate?
+    var created: String?
     var radius: Double?
     
-    var requestType: RequestType = .Caught
+    var requestType: RequestType = .Nearby
     
     enum RequestType {
         case Nearby
@@ -28,10 +29,17 @@ class Person: NetworkModel {
         case Caught
     }
     
-    init() {}
+    init() {
+        requestType = .Caught
+    }
     
     required init(json: JSON) {
-        
+        self.userId = json[Constants.Person.userId].string
+        self.username = json[Constants.Person.userName].string
+        self.avatar = json[Constants.Person.avatar].string
+        self.latitude = json[Constants.Person.latitude].double
+        self.longitude = json[Constants.Person.longitude].double
+        self.created = json[Constants.Person.userId].string
     }
     
     init(radius: Double) {
@@ -43,6 +51,12 @@ class Person: NetworkModel {
         self.requestType = .CheckIn
         self.latitude = coordinate.latitude
         self.longitude = coordinate.longitude
+    }
+    
+    init(userId: String, radius: Double) {
+        self.requestType = .Catch
+        self.userId = userId
+        self.radius = radius
     }
     
     func method() -> Alamofire.Method {

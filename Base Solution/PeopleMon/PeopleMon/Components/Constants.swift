@@ -45,6 +45,7 @@ struct Constants {
         static let created = "Created"
         static let radius = "radiusInMeters"
         static let caughtUserId = "CaughtUserId"
+        static let avatar = "AvatarBase64"
     }
 }
 
