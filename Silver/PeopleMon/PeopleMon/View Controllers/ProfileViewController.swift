@@ -42,9 +42,8 @@ class ProfileViewController: UIViewController {
             return
         }
         
-        let resizedImage = Utils.resizeImage(avatar.image!)
+        let resizedImage = Utils.resizeImage(avatar.image!, maxSize: Constants.serverImageSize)
         let imageString = Utils.stringFromImage(resizedImage)
-        print(imageString.characters.count)
         let user = User(fullName: name, avatar: imageString)
         
         MBProgressHUD.showHUDAddedTo(view, animated: true)
@@ -68,7 +67,7 @@ extension ProfileViewController: UINavigationControllerDelegate, UIImagePickerCo
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         picker.dismissViewControllerAnimated(true, completion: nil)
         if let image = info["UIImagePickerControllerEditedImage"] as? UIImage {
-            let resizedImage = Utils.resizeImage(image)
+            let resizedImage = Utils.resizeImage(image, maxSize: Constants.serverImageSize)
             avatar.image = resizedImage
         }
     }
