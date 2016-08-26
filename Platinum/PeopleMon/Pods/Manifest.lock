@@ -1,0 +1,33 @@
+PODS:
+  - AFDateHelper (3.4.2)
+  - Alamofire (3.4.1)
+  - JSQMessagesViewController (7.3.4):
+    - JSQSystemSoundPlayer (~> 2.0.1)
+  - JSQSystemSoundPlayer (2.0.1)
+  - MBProgressHUD (1.0.0)
+  - SnapKit (0.22.0)
+  - SwiftKeychainWrapper (2.0.0)
+  - SwiftyJSON (2.3.2)
+
+DEPENDENCIES:
+  - AFDateHelper
+  - Alamofire
+  - JSQMessagesViewController
+  - MBProgressHUD
+  - SnapKit
+  - SwiftKeychainWrapper
+  - SwiftyJSON
+
+SPEC CHECKSUMS:
+  AFDateHelper: aecee6bb264d6531795649f4ebac47783d2bab74
+  Alamofire: 01a82e2f6c0f860ade35534c8dd88be61bdef40c
+  JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
+  JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
+  MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
+  SnapKit: 0dd2fd157330f1ea11fd84da13e6be8a7a22bae0
+  SwiftKeychainWrapper: 3575838215fa36c816899c301a7afe370bd94814
+  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+
+PODFILE CHECKSUM: 50c87af0987c2216b7c02b00f8646b7b6f00efc7
+
+COCOAPODS: 1.0.1
