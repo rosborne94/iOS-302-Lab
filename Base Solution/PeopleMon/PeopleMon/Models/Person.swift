@@ -39,7 +39,7 @@ class Person: NetworkModel {
         self.avatar = json[Constants.Person.avatar].string
         self.latitude = json[Constants.Person.latitude].double
         self.longitude = json[Constants.Person.longitude].double
-        self.created = json[Constants.Person.userId].string
+        self.created = json[Constants.Person.created].string
     }
     
     init(radius: Double) {

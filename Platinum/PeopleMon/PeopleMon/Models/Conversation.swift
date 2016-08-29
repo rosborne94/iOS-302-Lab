@@ -13,11 +13,14 @@ import SwiftyJSON
 class Conversation: NetworkModel {
     var conversationId: Int?
     var recipientId: String?
+    var senderId: String?
     var recipientName: String?
+    var senderName: String?
     var lastMessage: String?
     var created: String?
     var messageCount: Int?
-    var avatar: String?
+    var recipientAvatar: String?
+    var senderAvatar: String?
     var pageSize: Int?
     var pageNumber: Int?
     
@@ -26,11 +29,14 @@ class Conversation: NetworkModel {
     required init(json: JSON) {
         conversationId = json[Constants.Conversation.conversationId].int
         recipientId = json[Constants.Conversation.recipientId].string
+        senderId = json[Constants.Conversation.senderId].string
         recipientName = json[Constants.Conversation.recipientName].string
+        senderName = json[Constants.Conversation.senderName].string
         lastMessage = json[Constants.Conversation.lastMessage].string
         created = json[Constants.Conversation.created].string
         messageCount = json[Constants.Conversation.messageCount].int
-        avatar = json[Constants.Conversation.avatar].string
+        recipientAvatar = json[Constants.Conversation.recipientAvatar].string
+        senderAvatar = json[Constants.Conversation.senderAvatar].string
     }
     
     init(pageSize: Int, pageNumber: Int) {

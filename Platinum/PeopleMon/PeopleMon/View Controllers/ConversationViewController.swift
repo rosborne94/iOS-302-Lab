@@ -41,14 +41,16 @@ class ConversationViewController: JSQMessagesViewController {
     }
     
     func getMessages() {
-        let conversationList = ConversationList(id: conversation!.conversationId!, pageSize: 100, pageNumber: 0)
-        WebServices.shared.getObject(conversationList) { (object, error) in
-            if let object = object, serverMessages = object.messages {
-                self.messages = []
-                for message in serverMessages {
-                    self.messages.append(JSQMessage(senderId: message.senderUserId!, displayName: "", text: message.message!))
+        if let conversation = conversation {
+            let conversationList = ConversationList(id: conversation.conversationId!, pageSize: 100, pageNumber: 0)
+            WebServices.shared.getObject(conversationList) { (object, error) in
+                if let object = object, serverMessages = object.messages {
+                    self.messages = []
+                    for message in serverMessages {
+                        self.messages.append(JSQMessage(senderId: message.senderUserId!, displayName: "", text: message.message!))
+                    }
+                    self.finishReceivingMessage()
                 }
-                self.finishReceivingMessage()
             }
         }
     }
@@ -70,7 +72,8 @@ class ConversationViewController: JSQMessagesViewController {
             return
         }
         
-        let message = Message(recipientId: conversation?.recipientId, message: text)
+        let recipientId = conversation?.senderId == senderId ? conversation?.recipientId : conversation?.senderId
+        let message = Message(recipientId: recipientId, message: text)
         WebServices.shared.postObject(message) { (object, error) in
             if let error = error {
                 self.presentViewController(Utils.createAlert(message: error), animated: true, completion: nil)
@@ -91,10 +94,10 @@ class ConversationViewController: JSQMessagesViewController {
     
     override func collectionView(collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageBubbleImageDataSource! {
         let message = messages[indexPath.item]
-        if message.senderId == conversation!.recipientId! {
-            return incomingBubbleImageView
-        } else {
+        if message.senderId == senderId {
             return outgoingBubbleImageView
+        } else {
+            return incomingBubbleImageView
         }
     }
     
@@ -103,10 +106,10 @@ class ConversationViewController: JSQMessagesViewController {
         
         let message = messages[indexPath.item]
         
-        if message.senderId == conversation!.recipientId! {
-            cell.textView!.textColor = UIColor.blackColor()
-        } else {
+        if message.senderId == senderId {
             cell.textView!.textColor = UIColor.whiteColor()
+        } else {
+            cell.textView!.textColor = UIColor.blackColor()
         }
         
         return cell

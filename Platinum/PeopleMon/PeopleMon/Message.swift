@@ -19,6 +19,7 @@ class Message: NetworkModel {
     var recipientUserId: String?
     var senderUserId: String?
     
+    var conversationId: Int?
     init() {}
     
     required init(json: JSON) {
@@ -27,6 +28,8 @@ class Message: NetworkModel {
         created = json[Constants.Message.created].string
         recipientUserId = json[Constants.Message.recipientUserId].string
         senderUserId = json[Constants.Message.senderUserId].string
+        
+        conversationId = json[Constants.Message.conversationId].int
     }
     
     init(recipientId: String?, message: String) {

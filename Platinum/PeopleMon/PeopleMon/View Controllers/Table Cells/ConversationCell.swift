@@ -18,13 +18,23 @@ class ConversationCell: UITableViewCell {
     func setupCell(conversation: Conversation) {
         self.conversation = conversation
         
-        nameLabel.text = conversation.recipientName ?? ""
         dateLabel.text = Utils.outputDate(conversation.lastMessage)
-        
-        if let image = Utils.imageFromString(conversation.avatar) {
-            avatar.image = image
+        if conversation.senderId == UserStore.shared.user?.id {
+            nameLabel.text = conversation.recipientName ?? ""
+            
+            if let image = Utils.imageFromString(conversation.recipientAvatar) {
+                avatar.image = image
+            } else {
+                avatar.image = Images.Avatar.image()
+            }
         } else {
-            avatar.image = Images.Avatar.image()
+            nameLabel.text = conversation.senderName ?? ""
+            
+            if let image = Utils.imageFromString(conversation.senderAvatar) {
+                avatar.image = image
+            } else {
+                avatar.image = Images.Avatar.image()
+            }
         }
     }
 }

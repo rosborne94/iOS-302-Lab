@@ -22,6 +22,7 @@ struct Constants {
     }
     
     struct User {
+        static let id = "Id"
         static let email = "Email"
         static let fullName = "FullName"
         static let password = "password"

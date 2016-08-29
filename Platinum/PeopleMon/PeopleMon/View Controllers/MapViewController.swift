@@ -22,6 +22,13 @@ class MapViewController: UIViewController, SegueHandlerType {
     
     var timer: NSTimer?
     
+    var nearbyView: UIView!
+    var nearbyCollectionView: UICollectionView!
+    var nearbyPeople: [Person] = []
+    var userOverlay: MKOverlay?
+    
+    var selectedOverlay: MKOverlay?
+    
     enum SegueIdentifier: String {
         case PresentLoginNoAnimation
         case PresentLogin
@@ -43,6 +50,8 @@ class MapViewController: UIViewController, SegueHandlerType {
         mapView.delegate = self
         
         UserStore.shared.delegate = self
+        
+        setupNearbyView()
     }
 
     override func didReceiveMemoryWarning() {
@@ -99,12 +108,77 @@ class MapViewController: UIViewController, SegueHandlerType {
         timer = nil
     }
     
+    func setupNearbyView() {
+        let bounds = UIScreen.mainScreen().bounds
+        let width: CGFloat = 196
+        let height: CGFloat = 240
+        
+        let closeButton = UIButton(frame: CGRect(x: 8, y: 196, width: 180, height: 44))
+        closeButton.addTarget(self, action: #selector(closeNearbyView(_:)), forControlEvents: .TouchUpInside)
+        closeButton.setTitle("Close", forState: .Normal)
+        closeButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        closeButton.titleLabel?.font = UIFont.boldSystemFontOfSize(14)
+        nearbyView = UIView(frame: CGRect(x: (bounds.width - width) / 2.0, y: (bounds.height - height) / 2.0, width: width, height: height))
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 60, height: 60)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        nearbyCollectionView = UICollectionView(frame: CGRect(x: 8, y: 8, width: 180, height: 180), collectionViewLayout: layout)
+        nearbyCollectionView.dataSource = self
+        nearbyCollectionView.delegate = self
+        nearbyCollectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        nearbyCollectionView.scrollEnabled = false
+        nearbyView.addSubview(nearbyCollectionView)
+        nearbyView.addSubview(closeButton)
+        nearbyView.backgroundColor = UIColor.whiteColor()
+        nearbyCollectionView.backgroundColor = UIColor.clearColor()
+        self.view.addSubview(nearbyView)
+        
+        let translateTransform = CGAffineTransformMakeTranslation(0, bounds.height)
+        nearbyView.transform = translateTransform
+    }
+    
+    func removeSelectedOverlay() {
+        if let selectedOverlay = selectedOverlay {
+            mapView.removeOverlay(selectedOverlay)
+            self.selectedOverlay = nil
+        }
+    }
+    
     
     // MARK: - IBActions
     @IBAction func logout(sender: AnyObject) {
         UserStore.shared.logout { 
             self.performSegueWithIdentifier(.PresentLogin, sender: self)
         }
+    }
+    
+    @IBAction func openNearbyView(sender: AnyObject) {
+        let person = Person(radius: Constants.nearbyRadius)
+        WebServices.shared.getObjects(person) { (objects, error) in
+            if let objects = objects {
+                self.nearbyPeople = objects
+                for person in objects {
+                    if let lat = person.latitude, long = person.longitude {
+                        person.distance = self.locationManager.location?.distanceFromLocation(CLLocation(latitude: lat, longitude: long))
+                    }
+                }
+                self.nearbyPeople = objects.sort({ (person1, person2) -> Bool in
+                    person1.distance < person2.distance
+                })
+                self.nearbyCollectionView.reloadData()
+            }
+        }
+        UIView.animateWithDuration(0.8, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.8, options: [], animations: {
+            self.nearbyView.transform = CGAffineTransformMakeTranslation(0, 0)
+            }, completion: nil)
+    }
+    
+    @IBAction func closeNearbyView(sender: AnyObject) {
+        UIView.animateWithDuration(0.8, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.8, options: [], animations: {
+            self.nearbyView.transform = CGAffineTransformMakeTranslation(0, UIScreen.mainScreen().bounds.height)
+            }, completion: nil)
     }
 }
 
@@ -116,6 +190,13 @@ extension MapViewController: CLLocationManagerDelegate {
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpanMake(latitudeDelta, longitudeDelta))
         
         self.mapView.setRegion(region, animated: true)
+        
+        if let userOverlay = userOverlay {
+            mapView.removeOverlay(userOverlay)
+        }
+        
+        userOverlay = MKCircle(centerCoordinate: center, radius: Constants.radius)
+        mapView.addOverlay(userOverlay!)
     }
 }
 
@@ -188,15 +269,20 @@ extension MapViewController: MKMapViewDelegate {
         }
     }
     
-    func mapView(mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        self.overlay = overlay
-        let renderer = MKPolylineRenderer(overlay: overlay)
-        renderer.strokeColor = UIColor.blueColor()
-        renderer.lineWidth = 5.0
-        renderer.lineCap = CGLineCap.Round
-        return renderer
+    func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
+        let circleOverlay = MKCircleRenderer(overlay: overlay)
+        if let userOverlay = userOverlay where userOverlay.coordinate.latitude == overlay.coordinate.latitude && userOverlay.coordinate.longitude == overlay.coordinate.longitude {
+            circleOverlay.lineWidth = 1
+            circleOverlay.strokeColor = UIColor.lightGrayColor()
+            circleOverlay.fillColor = UIColor.lightGrayColor().colorWithAlphaComponent(0.5)
+        } else {
+            circleOverlay.lineWidth = 0
+            circleOverlay.fillColor = UIColor.lightGrayColor().colorWithAlphaComponent(0.25)
+        }
+        return circleOverlay
     }
 }
+
 
 // MARK: - UserStoreDelegate
 extension MapViewController: UserStoreDelegate {
@@ -205,5 +291,43 @@ extension MapViewController: UserStoreDelegate {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(startTimer), name: UIApplicationDidBecomeActiveNotification, object: nil)
         stopTimer()
         startTimer()
+    }
+}
+
+
+// MARK: - CollectionView
+extension MapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return min(nearbyPeople.count, 9)
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath)
+        
+        let person = nearbyPeople[indexPath.row];
+        let imageView = CircleImage(frame: CGRect(x: 5, y: 5, width: 50, height: 50))
+        imageView.contentMode = .ScaleAspectFill
+        imageView.image = Utils.imageFromString(person.avatar)
+        cell.addSubview(imageView)
+        
+        return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let person = nearbyPeople[indexPath.row]
+        if let lat = person.latitude, long = person.longitude {
+            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+            if let selectedOverlay = selectedOverlay {
+                mapView.removeOverlay(selectedOverlay)
+            }
+            selectedOverlay = MKCircle(centerCoordinate: coordinate, radius: Constants.radius / 2.0)
+            mapView.addOverlay(selectedOverlay!)
+            let _ = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(removeSelectedOverlay), userInfo: nil, repeats: false)
+            closeNearbyView(self)
+        }
     }
 }

@@ -59,7 +59,7 @@ class Utils {
     class func outputDate(dateString: String?) -> String {
         if let dateString = dateString {
             let date = NSDate(fromString: dateString, format: .ISO8601(nil))
-            return date.toString(format: .Custom("M/d/yyyy h:m:s a"))
+            return date.toString(format: .Custom("M/d/yyyy h:mm a"))
         }
         return ""
     }

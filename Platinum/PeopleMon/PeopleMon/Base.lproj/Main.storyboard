@@ -58,6 +58,11 @@
                                     <segue destination="zhV-sj-kam" kind="presentation" id="5tt-1E-kTn"/>
                                 </connections>
                             </barButtonItem>
+                            <barButtonItem image="Nearby" id="yRh-hj-IL4">
+                                <connections>
+                                    <action selector="openNearbyView:" destination="BYZ-38-t0r" id="Eog-mY-bc4"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
@@ -155,11 +160,11 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="68"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Hev-hh-MVm" id="l0a-Jc-6HN">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="67.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="68"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4TR-Zr-3ek">
-                                            <rect key="frame" x="72" y="23" width="42.5" height="21"/>
+                                            <rect key="frame" x="72" y="23" width="43" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="srn-xg-mVl"/>
                                             </constraints>
@@ -168,7 +173,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="120" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9LA-kb-d93">
-                                            <rect key="frame" x="571.5" y="26.5" width="20.5" height="14.5"/>
+                                            <rect key="frame" x="572" y="27" width="20" height="14"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="lYv-cW-3C9"/>
                                             </constraints>
@@ -181,8 +186,8 @@
                                                 </mask>
                                             </variation>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xUZ-XT-Gjf" customClass="CircleImage" customModule="PeopleMon" customModuleProvider="target">
-                                            <rect key="frame" x="4" y="4.5" width="60" height="59.5"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xUZ-XT-Gjf" customClass="CircleImage" customModule="PeopleMon" customModuleProvider="target">
+                                            <rect key="frame" x="4" y="5" width="60" height="59"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="60" id="Juj-oy-k55"/>
                                                 <constraint firstAttribute="height" constant="60" id="jkM-3A-05k"/>
@@ -300,11 +305,11 @@
                                 <rect key="frame" x="0.0" y="92" width="600" height="68"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mJr-dc-BT5" id="CYR-hk-FiV">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="67.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="68"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lrB-iX-RJi">
-                                            <rect key="frame" x="72" y="23" width="42.5" height="21"/>
+                                            <rect key="frame" x="72" y="23" width="43" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="dtf-lH-BOl"/>
                                             </constraints>
@@ -313,7 +318,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="120" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ncx-Lb-adf">
-                                            <rect key="frame" x="571.5" y="27" width="20.5" height="14.5"/>
+                                            <rect key="frame" x="572" y="27" width="20" height="15"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="afB-w4-bVG"/>
                                             </constraints>
@@ -327,7 +332,7 @@
                                             </variation>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="p3s-qn-gvB" customClass="CircleImage" customModule="PeopleMon" customModuleProvider="target">
-                                            <rect key="frame" x="4" y="4" width="60" height="59.5"/>
+                                            <rect key="frame" x="4" y="4" width="60" height="60"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="60" id="KPM-x0-CKt"/>
                                                 <constraint firstAttribute="height" constant="60" id="c8y-lc-Vhk"/>
@@ -380,6 +385,7 @@
         <image name="Caught" width="25" height="25"/>
         <image name="Chat" width="25" height="25"/>
         <image name="Logout" width="25" height="25"/>
+        <image name="Nearby" width="25" height="25"/>
         <image name="Profile" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>

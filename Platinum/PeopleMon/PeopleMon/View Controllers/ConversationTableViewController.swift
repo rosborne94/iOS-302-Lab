@@ -46,7 +46,7 @@ class ConversationTableViewController: UITableViewController, SegueHandlerType {
         default:
             break
         }
-        destVC.senderId = ""
+        destVC.senderId = UserStore.shared.user!.id!
         destVC.senderDisplayName = ""
     }
     

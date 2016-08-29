@@ -20,6 +20,8 @@ class Person: NetworkModel {
     var created: String?
     var radius: Double?
     
+    var distance: Double?
+    
     var requestType: RequestType = .Nearby
     
     enum RequestType {

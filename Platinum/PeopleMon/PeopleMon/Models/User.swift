@@ -11,6 +11,7 @@ import Alamofire
 import SwiftyJSON
 
 class User: NetworkModel {
+    var id: String?
     var email: String?
     var fullName: String?
     var avatar: String?
@@ -43,6 +44,7 @@ class User: NetworkModel {
         token = json[Constants.User.token].string
         expirationDate = json[Constants.User.expirationDate].string
         
+        id = json[Constants.User.id].string
         email = json[Constants.User.email].string
         hasRegistered = json[Constants.User.hasRegistered].boolValue
         loginProvider = json[Constants.User.loginProvider].string

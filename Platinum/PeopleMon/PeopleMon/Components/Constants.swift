@@ -14,6 +14,8 @@ struct Constants {
     static let serverImageSize: CGFloat = 80
     static let pinImageSize: CGFloat = 16
     
+    static let nearbyRadius = 500.0
+    
     struct JSON {
         static let badRequest = "Bad Request"
         static let unknownError = "An Unknown Error Has Occurred"
@@ -24,6 +26,7 @@ struct Constants {
     }
     
     struct User {
+        static let id = "Id"
         static let email = "Email"
         static let fullName = "FullName"
         static let password = "password"
@@ -55,10 +58,13 @@ struct Constants {
         static let conversationId = "ConversationId"
         static let recipientId = "RecipientId"
         static let recipientName = "RecipientName"
+        static let senderId = "SenderId"
+        static let senderName = "SenderName"
         static let lastMessage = "LastMessage"
         static let created = "Created"
         static let messageCount = "MessageCount"
-        static let avatar = "AvatarBase64"
+        static let recipientAvatar = "RecipientAvatarBase64"
+        static let senderAvatar = "SenderAvatarBase64"
         static let pageSize = "pageSize"
         static let pageNumber = "pageNumber"
     }
@@ -80,6 +86,8 @@ struct Constants {
         static let created = "Created"
         static let recipientUserId = "RecipientUserId"
         static let senderUserId = "SenderUserId"
+        
+        static let conversationId = "conversationId"
     }
 }
 
