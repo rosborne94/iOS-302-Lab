@@ -9,7 +9,7 @@
 import UIKit
 
 struct Constants {
-    static let apiKey = "ios301november2016"
+    static let apiKey = "iOSandroid301november2016"
     static let radius = 100.0
     
     struct JSON {

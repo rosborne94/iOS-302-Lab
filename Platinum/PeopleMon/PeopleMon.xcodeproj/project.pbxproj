@@ -25,6 +25,7 @@
 		F113A2411D6E337200FE2A1D /* MapPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113A2401D6E337200FE2A1D /* MapPin.swift */; };
 		F113A2431D6E384500FE2A1D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113A2421D6E384500FE2A1D /* ProfileViewController.swift */; };
 		F113A2451D6E386200FE2A1D /* CaughtViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F113A2441D6E386200FE2A1D /* CaughtViewController.swift */; };
+		F11643361D805EBE002CCC4C /* SelectUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11643351D805EBE002CCC4C /* SelectUserViewController.swift */; };
 		F16585FB1D709F5400F650F1 /* ConversationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16585FA1D709F5400F650F1 /* ConversationTableViewController.swift */; };
 		F16585FD1D709FC500F650F1 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16585FC1D709FC500F650F1 /* Conversation.swift */; };
 		F16585FF1D709FCE00F650F1 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = F16585FE1D709FCE00F650F1 /* Message.swift */; };
@@ -59,6 +60,7 @@
 		F113A2401D6E337200FE2A1D /* MapPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPin.swift; sourceTree = "<group>"; };
 		F113A2421D6E384500FE2A1D /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileViewController.swift; path = "View Controllers/ProfileViewController.swift"; sourceTree = "<group>"; };
 		F113A2441D6E386200FE2A1D /* CaughtViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CaughtViewController.swift; path = "View Controllers/CaughtViewController.swift"; sourceTree = "<group>"; };
+		F11643351D805EBE002CCC4C /* SelectUserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SelectUserViewController.swift; path = "View Controllers/SelectUserViewController.swift"; sourceTree = "<group>"; };
 		F16585FA1D709F5400F650F1 /* ConversationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConversationTableViewController.swift; path = "View Controllers/ConversationTableViewController.swift"; sourceTree = "<group>"; };
 		F16585FC1D709FC500F650F1 /* Conversation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Conversation.swift; path = Models/Conversation.swift; sourceTree = "<group>"; };
 		F16585FE1D709FCE00F650F1 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				F113A2441D6E386200FE2A1D /* CaughtViewController.swift */,
 				F16585FA1D709F5400F650F1 /* ConversationTableViewController.swift */,
 				F16586021D70C13300F650F1 /* ConversationViewController.swift */,
+				F11643351D805EBE002CCC4C /* SelectUserViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -345,6 +348,7 @@
 				F1019F6A1D64F5270049CC3B /* Utils.swift in Sources */,
 				F1019F5A1D64E5470049CC3B /* WebServices.swift in Sources */,
 				F16586051D70CECF00F650F1 /* ConversationList.swift in Sources */,
+				F11643361D805EBE002CCC4C /* SelectUserViewController.swift in Sources */,
 				F113A23A1D6DDDA500FE2A1D /* Person.swift in Sources */,
 				F113A2411D6E337200FE2A1D /* MapPin.swift in Sources */,
 				F1019F681D64F2EB0049CC3B /* SegueHandlerType.swift in Sources */,

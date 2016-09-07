@@ -41,8 +41,8 @@ class ConversationViewController: JSQMessagesViewController {
     }
     
     func getMessages() {
-        if let conversation = conversation {
-            let conversationList = ConversationList(id: conversation.conversationId!, pageSize: 100, pageNumber: 0)
+        if let conversation = conversation, conversationId = conversation.conversationId {
+            let conversationList = ConversationList(id: conversationId, pageSize: 100, pageNumber: 0)
             WebServices.shared.getObject(conversationList) { (object, error) in
                 if let object = object, serverMessages = object.messages {
                     self.messages = []
@@ -78,6 +78,9 @@ class ConversationViewController: JSQMessagesViewController {
             if let error = error {
                 self.presentViewController(Utils.createAlert(message: error), animated: true, completion: nil)
             } else {
+                if let object = object {
+                    self.conversation?.conversationId = object.conversationId
+                }
                 self.messages.append(JSQMessage(senderId: senderId, displayName: UserStore.shared.user?.fullName ?? "", text: message.message ?? ""))
                 self.finishSendingMessage()
             }
