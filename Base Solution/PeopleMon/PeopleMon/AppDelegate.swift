@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        WebServices.shared.baseURL = "https://ai-efc-peoplemon-api.azurewebsites.net/"
+        WebServices.shared.baseURL = "https://efa-peoplemon-api.azurewebsites.net/"
         
         return true
     }
