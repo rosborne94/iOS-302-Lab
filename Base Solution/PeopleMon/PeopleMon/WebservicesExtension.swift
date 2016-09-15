@@ -61,8 +61,8 @@ extension WebServices {
         
         do {
             let json = try JSON(data: data)
-            let people = try json.getArray().map(T.init)
-            objects = people
+            let theObjects = try json.getArray().map(T.init)
+            objects = theObjects
         } catch {
             errorString = Constants.JSON.processingError
         }
