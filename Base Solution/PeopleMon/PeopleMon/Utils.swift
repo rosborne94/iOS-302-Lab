@@ -10,8 +10,8 @@ import UIKit
 
 class Utils {
     class func createAlert(title: String = "Error", message: String, dismissButtonTitle: String = "Dismiss") -> UIAlertController {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: dismissButtonTitle, style: .Default, handler: nil))
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: dismissButtonTitle, style: .default, handler: nil))
         return alert
     }
     
@@ -19,7 +19,7 @@ class Utils {
         let emailRegEx = "[A-Za-z0-9-_.]+[@]{1}[A-Za-z0-9-]+[.]*[A-Za-z0-9-]+[.]{1}[A-Za-z]+"
         
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-        return emailTest.evaluateWithObject(testStr)
+        return emailTest.evaluate(with: testStr)
     }
     
     class func resizeImage(image: UIImage) -> UIImage {
@@ -31,28 +31,28 @@ class Utils {
             newSize = CGSize(width: maxSize * (image.size.width / image.size.height), height: maxSize)
         }
         
-        let newRect = CGRectIntegral(CGRectMake(0,0, newSize.width, newSize.height))
+        let newRect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height).integral
         UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetInterpolationQuality(context, .High)
-        let flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, newSize.height)
-        CGContextConcatCTM(context, flipVertical)
-        CGContextDrawImage(context, newRect, image.CGImage)
-        let newImage = UIImage(CGImage: CGBitmapContextCreateImage(context)!)
+        context!.interpolationQuality = .high
+        let flipVertical = CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: newSize.height)
+        context!.concatenate(flipVertical)
+        context!.draw(image.cgImage!, in: newRect)
+        let newImage = UIImage(cgImage: context!.makeImage()!)
         UIGraphicsEndImageContext()
         return newImage
     }
     
     class func imageFromString(imageString: String?) -> UIImage? {
-        if let imageString = imageString, imageData = NSData(base64EncodedString: imageString, options: .IgnoreUnknownCharacters) {
-            return UIImage(data: imageData)
+        if let imageString = imageString, let imageData = Data(base64Encoded: imageString, options: .ignoreUnknownCharacters) {
+            return UIImage(data: imageData as Data)
         }
         return Images.Avatar.image()
     }
     
     class func stringFromImage(image: UIImage?) -> String {
-        if let image = image, imageData = UIImagePNGRepresentation(image) {
-            return imageData.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
+        if let image = image, let imageData = UIImagePNGRepresentation(image) {
+            return imageData.base64EncodedString()
         }
         return ""
     }

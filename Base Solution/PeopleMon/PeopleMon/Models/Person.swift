@@ -8,7 +8,7 @@
 
 import UIKit
 import Alamofire
-import SwiftyJSON
+import Freddy
 import MapKit
 
 class Person: NetworkModel {
@@ -34,12 +34,12 @@ class Person: NetworkModel {
     }
     
     required init(json: JSON) {
-        self.userId = json[Constants.Person.userId].string
-        self.username = json[Constants.Person.userName].string
-        self.avatar = json[Constants.Person.avatar].string
-        self.latitude = json[Constants.Person.latitude].double
-        self.longitude = json[Constants.Person.longitude].double
-        self.created = json[Constants.Person.created].string
+        self.userId = try? json.getString(at: Constants.Person.userId)
+        self.username = try? json.getString(at: Constants.Person.userName)
+        self.avatar = try? json.getString(at: Constants.Person.avatar)
+        self.latitude = try? json.getDouble(at: Constants.Person.latitude)
+        self.longitude = try? json.getDouble(at: Constants.Person.longitude)
+        self.created = try? json.getString(at: Constants.Person.created)
     }
     
     init(radius: Double) {
@@ -59,12 +59,12 @@ class Person: NetworkModel {
         self.radius = radius
     }
     
-    func method() -> Alamofire.Method {
+    func method() -> Alamofire.HTTPMethod {
         switch requestType {
         case .Nearby, .Caught:
-            return .GET
+            return .get
         default:
-            return .POST
+            return .post
         }
     }
     
@@ -86,13 +86,13 @@ class Person: NetworkModel {
         
         switch requestType {
         case .Nearby:
-            params[Constants.Person.radius] = radius
+            params[Constants.Person.radius] = radius as AnyObject?
         case .CheckIn:
-            params[Constants.Person.latitude] = latitude
-            params[Constants.Person.longitude] = longitude
+            params[Constants.Person.latitude] = latitude as AnyObject?
+            params[Constants.Person.longitude] = longitude as AnyObject?
         case .Catch:
-            params[Constants.Person.caughtUserId] = userId
-            params[Constants.Person.radius] = radius
+            params[Constants.Person.caughtUserId] = userId as AnyObject?
+            params[Constants.Person.radius] = radius as AnyObject?
         case .Caught:
             break
         }

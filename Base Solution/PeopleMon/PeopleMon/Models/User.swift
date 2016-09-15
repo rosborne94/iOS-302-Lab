@@ -8,7 +8,7 @@
 
 import UIKit
 import Alamofire
-import SwiftyJSON
+import Freddy
 
 class User: NetworkModel {
     var id: String?
@@ -40,18 +40,18 @@ class User: NetworkModel {
         requestType = .UserInfo
     }
     
-    required init(json: JSON) {
-        token = json[Constants.User.token].string
-        expirationDate = json[Constants.User.expirationDate].string
+    required init(json: JSON) throws {
+        token = try? json.getString(at: Constants.User.token)
+        expirationDate = try? json.getString(at: Constants.User.expirationDate)
         
-        id = json[Constants.User.id].string
-        email = json[Constants.User.email].string
-        hasRegistered = json[Constants.User.hasRegistered].boolValue
-        loginProvider = json[Constants.User.loginProvider].string
-        fullName = json[Constants.User.fullName].string
-        avatar = json[Constants.User.avatarBase64].string
-        latitude = json[Constants.User.latitude].double
-        longitude = json[Constants.User.longitude].double
+        id = try? json.getString(at: Constants.User.id)
+        email = try? json.getString(at: Constants.User.email)
+        hasRegistered = try! json.getBool(at: Constants.User.hasRegistered)
+        loginProvider = try? json.getString(at: Constants.User.loginProvider)
+        fullName = try? json.getString(at: Constants.User.fullName)
+        avatar = try? json.getString(at: Constants.User.avatarBase64)
+        latitude = try? json.getDouble(at: Constants.User.latitude)
+        longitude = try? json.getDouble(at: Constants.User.longitude)
     }
     
     init(email: String, password: String) {
@@ -74,12 +74,12 @@ class User: NetworkModel {
         requestType = .UpdateProfile
     }
     
-    func method() -> Alamofire.Method {
+    func method() -> Alamofire.HTTPMethod {
         switch requestType {
         case .UserInfo:
-            return .GET
+            return .get
         default:
-            return .POST
+            return .post
         }
     }
     
@@ -101,18 +101,18 @@ class User: NetworkModel {
         
         switch requestType {
         case .Register:
-            params[Constants.User.email] = email
-            params[Constants.User.fullName] = fullName
-            params[Constants.User.profileImage] = avatar
-            params[Constants.User.apiKey] = self.apiKey
-            params[Constants.User.password] = password
+            params[Constants.User.email] = email as AnyObject?
+            params[Constants.User.fullName] = fullName as AnyObject?
+            params[Constants.User.profileImage] = avatar as AnyObject?
+            params[Constants.User.apiKey] = self.apiKey as AnyObject?
+            params[Constants.User.password] = password as AnyObject?
         case .Login:
-            params[Constants.User.username] = email
-            params[Constants.User.password] = password
-            params[Constants.User.grantType] = Constants.User.password
+            params[Constants.User.username] = email as AnyObject?
+            params[Constants.User.password] = password as AnyObject?
+            params[Constants.User.grantType] = Constants.User.password as AnyObject?
         case .UpdateProfile:
-            params[Constants.User.fullName] = fullName
-            params[Constants.User.avatarBase64] = avatar
+            params[Constants.User.fullName] = fullName as AnyObject?
+            params[Constants.User.avatarBase64] = avatar as AnyObject?
         default:
             break
         }

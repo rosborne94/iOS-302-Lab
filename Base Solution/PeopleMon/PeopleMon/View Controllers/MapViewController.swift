@@ -20,7 +20,7 @@ class MapViewController: UIViewController, SegueHandlerType {
     var overlay: MKOverlay?
     var firstLocation = true
     
-    var timer: NSTimer?
+    var timer: Timer?
     
     enum SegueIdentifier: String {
         case PresentLoginNoAnimation
@@ -36,8 +36,8 @@ class MapViewController: UIViewController, SegueHandlerType {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         mapView.showsUserLocation = true
-        mapView.zoomEnabled = false
-        mapView.scrollEnabled = false
+        mapView.isZoomEnabled = false
+        mapView.isScrollEnabled = false
         locationManager.startUpdatingLocation()
         
         mapView.delegate = self
@@ -49,9 +49,9 @@ class MapViewController: UIViewController, SegueHandlerType {
         super.didReceiveMemoryWarning()
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         if !WebServices.shared.userAuthTokenExists() || WebServices.shared.userAuthTokenExpired() {
-            performSegueWithIdentifier(.PresentLoginNoAnimation, sender: self)
+            performSegueWithIdentifier(segueIdentifier: .PresentLoginNoAnimation, sender: self)
         } else {
             let infoUser = User()
             WebServices.shared.getObject(infoUser, completion: { (user, error) in
@@ -62,8 +62,8 @@ class MapViewController: UIViewController, SegueHandlerType {
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self)
         stopTimer()
     }
     
@@ -91,7 +91,7 @@ class MapViewController: UIViewController, SegueHandlerType {
     }
     
     func startTimer() {
-        timer = NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: #selector(loadMap), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 2.0, target: self, selector: #selector(loadMap), userInfo: nil, repeats: true)
     }
     
     func stopTimer() {
@@ -103,14 +103,14 @@ class MapViewController: UIViewController, SegueHandlerType {
     // MARK: - IBActions
     @IBAction func logout(sender: AnyObject) {
         UserStore.shared.logout { 
-            self.performSegueWithIdentifier(.PresentLogin, sender: self)
+            self.performSegueWithIdentifier(segueIdentifier: .PresentLogin, sender: self)
         }
     }
 }
 
 // MARK: - CLLocationManagerDelegate
 extension MapViewController: CLLocationManagerDelegate {
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations.last!
         let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpanMake(latitudeDelta, longitudeDelta))
@@ -121,14 +121,14 @@ extension MapViewController: CLLocationManagerDelegate {
 
 // MARK: - MKMapViewDelegate
 extension MapViewController: MKMapViewDelegate {
-    func mapView(mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation is MKUserLocation {
             return nil
         }
         
         let reuseId = "pin"
         
-        var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = false
@@ -140,30 +140,30 @@ extension MapViewController: MKMapViewDelegate {
         return pinView
     }
     
-    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        if let mapPin = view.annotation as? MapPin, person = mapPin.person, name = person.username, userId = person.userId {
-            let alert = UIAlertController(title: "Catch User", message: "Catch \(name)?", preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "Catch", style: .Default, handler: { (action) in
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if let mapPin = view.annotation as? MapPin, let person = mapPin.person, let name = person.username, let userId = person.userId {
+            let alert = UIAlertController(title: "Catch User", message: "Catch \(name)?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Catch", style: .default, handler: { (action) in
                 let catchPerson = Person(userId: userId, radius: Constants.radius)
                 WebServices.shared.postObject(catchPerson, completion: { (object, error) in
                     if let error = error {
-                        self.presentViewController(Utils.createAlert(message: error), animated: true, completion: nil)
+                        self.present(Utils.createAlert(message: error), animated: true, completion: nil)
                     } else {
-                        self.presentViewController(Utils.createAlert(message: "User Caught"), animated: true, completion: nil)
+                        self.present(Utils.createAlert(message: "User Caught"), animated: true, completion: nil)
                     }
                 })
             }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
-    func mapView(mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         self.overlay = overlay
         let renderer = MKPolylineRenderer(overlay: overlay)
-        renderer.strokeColor = UIColor.blueColor()
+        renderer.strokeColor = UIColor.blue
         renderer.lineWidth = 5.0
-        renderer.lineCap = CGLineCap.Round
+        renderer.lineCap = CGLineCap.round
         return renderer
     }
 }
@@ -171,8 +171,8 @@ extension MapViewController: MKMapViewDelegate {
 // MARK: - UserStoreDelegate
 extension MapViewController: UserStoreDelegate {
     func userLoggedIn() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(stopTimer), name: UIApplicationWillResignActiveNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(startTimer), name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(stopTimer), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(startTimer), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         stopTimer()
         startTimer()
     }

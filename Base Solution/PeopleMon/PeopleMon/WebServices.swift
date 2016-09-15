@@ -8,14 +8,13 @@
 
 import Foundation
 import Alamofire
-import SwiftyJSON
-import SwiftKeychainWrapper
-import AFDateHelper
+import Freddy
+import Valet
 
 class WebServices: NSObject {
     static let shared = WebServices()
     
-    private var _baseURL = ""
+    fileprivate var _baseURL = ""
     var baseURL : String {
         get {
             return _baseURL
@@ -25,41 +24,48 @@ class WebServices: NSObject {
         }
     }
     
-    private var authToken: String? {
+    fileprivate var authToken: String? {
         get {
-            if let authTokenString:String = KeychainWrapper.defaultKeychainWrapper().stringForKey("authToken") {
+            let myValet = VALValet(identifier: Constants.keychainIdentifier, accessibility: .whenUnlocked)
+            
+            if let authTokenString = myValet?.string(forKey: Constants.authToken) {
                 return authTokenString
             } else {
                 return nil
             }
         }
         set {
-            if newValue != nil {
-                KeychainWrapper.defaultKeychainWrapper().setString(newValue!, forKey: "authToken")
+            let myValet = VALValet(identifier: Constants.keychainIdentifier, accessibility: .whenUnlocked)
+            
+            if let newValue = newValue {
+                myValet?.setString(newValue, forKey: Constants.authToken)
             } else {
-                KeychainWrapper.defaultKeychainWrapper().removeObjectForKey("authToken")
+                myValet?.removeObject(forKey: Constants.authToken)
             }
         }
     }
     
-    private var authTokenExpireDate: String? {
+    fileprivate var authTokenExpireDate: String? {
         get {
-            if let authExpireDate:String = KeychainWrapper.defaultKeychainWrapper().stringForKey("authTokenExpireDate") {
+            let myValet = VALValet(identifier: Constants.keychainIdentifier, accessibility: .whenUnlocked)
+            
+            if let authExpireDate = myValet?.string(forKey: Constants.authTokenExpireDate) {
                 return authExpireDate
             } else {
                 return nil
             }
         } set {
-            if newValue != nil {
-                KeychainWrapper.defaultKeychainWrapper().setString(newValue!, forKey: "authTokenExpireDate")
-            }
-            else {
-                KeychainWrapper.defaultKeychainWrapper().removeObjectForKey("authTokenExpireDate")
+            let myValet = VALValet(identifier: Constants.keychainIdentifier, accessibility: .whenUnlocked)
+            
+            if let newValue = newValue {
+                myValet?.setString(newValue, forKey: Constants.authTokenExpireDate)
+            } else {
+                myValet?.removeObject(forKey: Constants.authTokenExpireDate)
             }
         }
     }
     
-    func setAuthToken(token: String?, expiration: String?) {
+    func setAuthToken(_ token: String?, expiration: String?) {
         authToken = token
         authTokenExpireDate = expiration
     }
@@ -74,16 +80,21 @@ class WebServices: NSObject {
     }
     
     func userAuthTokenExpired() -> Bool {
-        if let expireDateString = self.authTokenExpireDate {
+        if self.authTokenExpireDate != nil {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss Z"
             
-            let expireDate = NSDate(fromString: expireDateString, format: .Custom("EEE, dd MMM yyyy HH:mm:ss Z"))
-            
-            let hourFromNow = NSDate().dateByAddingTimeInterval(3600)
-            
-            if expireDate.compare(hourFromNow) == NSComparisonResult.OrderedAscending {
-                return true
+            let dateString = self.authTokenExpireDate!
+            if let expireDate = dateFormatter.date(from: dateString) {
+                let hourFromNow = Date().addingTimeInterval(3600)
+                
+                if expireDate.compare(hourFromNow) == ComparisonResult.orderedAscending {
+                    return true
+                } else {
+                    return false
+                }
             } else {
-                return false
+                return true
             }
         } else {
             return true
@@ -100,29 +111,31 @@ class WebServices: NSObject {
         static var baseURLString = WebServices.shared._baseURL
         static var OAuthToken: String?
         
-        case RESTRequest(NetworkModel)
+        case restRequest(NetworkModel)
         
-        var URLRequest: NSMutableURLRequest {
+        func asURLRequest() throws -> URLRequest {
+            let URL = try AuthRouter.baseURLString.asURL()
+            var urlRequest: URLRequest
+            
             switch self {
-            case .RESTRequest(let model):
-                let URL = NSURL(string: AuthRouter.baseURLString)!
-                let mutableURLRequest = NSMutableURLRequest(URL: URL.URLByAppendingPathComponent(model.path()))
+            case .restRequest(let model):
+                urlRequest = URLRequest(url: URL.appendingPathComponent(model.path()))
                 
-                mutableURLRequest.HTTPMethod = model.method().rawValue
+                urlRequest.httpMethod = model.method().rawValue
                 
                 if let token = WebServices.shared.authToken {
-                    mutableURLRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                    urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
                 }
                 
                 if let params = model.toDictionary() {
-                    if model.method() == .GET {
-                        return ParameterEncoding.URL.encode(mutableURLRequest, parameters: params).0
+                    if model.method() == .get {
+                        return try! URLEncoding.default.encode(urlRequest, with: params)
                     } else {
-                        return ParameterEncoding.JSON.encode(mutableURLRequest, parameters: params).0
+                        return try! JSONEncoding.default.encode(urlRequest, with: params)
                     }
                 }
                 
-                return mutableURLRequest
+                return urlRequest
             }
         }
     }
