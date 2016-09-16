@@ -36,7 +36,11 @@ extension WebServices {
         var object: T?
         
         guard case .success(_) = response.result, let data = response.data else {
-            completion(nil, parseError(response: response))
+            if let statusCode = response.response?.statusCode, statusCode >= 200, statusCode < 300 {
+                completion(T(), nil)
+            } else {
+                completion(nil, parseError(response: response))
+            }
             return
         }
         

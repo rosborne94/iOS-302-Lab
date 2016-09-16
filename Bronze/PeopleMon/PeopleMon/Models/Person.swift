@@ -29,7 +29,7 @@ class Person: NetworkModel {
         case caught
     }
     
-    init() {
+    required init() {
         requestType = .caught
     }
     

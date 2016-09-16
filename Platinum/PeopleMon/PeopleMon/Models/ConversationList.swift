@@ -20,7 +20,7 @@ class ConversationList: NetworkModel {
     var pageSize: Int?
     var pageNumber: Int?
     
-    init() {}
+    required init() {}
     
     required init(json: JSON) throws {
         count = try? json.getInt(at: Constants.ConversationList.count)

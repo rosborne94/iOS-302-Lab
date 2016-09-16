@@ -20,7 +20,7 @@ class Message: NetworkModel {
     var senderUserId: String?
     
     var conversationId: Int?
-    init() {}
+    required init() {}
     
     required init(json: JSON) throws {
         messageId = try? json.getInt(at: Constants.Message.messageId)

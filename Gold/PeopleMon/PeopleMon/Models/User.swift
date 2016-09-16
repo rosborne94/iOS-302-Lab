@@ -36,7 +36,7 @@ class User: NetworkModel {
         case updateProfile
     }
     
-    init() {
+    required init() {
         requestType = .userInfo
     }
     

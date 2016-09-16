@@ -24,7 +24,7 @@ class Conversation: NetworkModel {
     var pageSize: Int?
     var pageNumber: Int?
     
-    init() {}
+    required init() {}
     
     required init(json: JSON) throws {
         conversationId = try? json.getInt(at: Constants.Conversation.conversationId)
