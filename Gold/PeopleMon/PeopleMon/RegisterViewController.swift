@@ -24,37 +24,37 @@ class RegisterViewController: UIViewController {
     }
     
     @IBAction func registerTapped(sender: AnyObject) {
-        guard let fullName = fullNameTextField.text where fullName != "" else {
-            presentViewController(Utils.createAlert("Login Error", message: "Please provide your name"), animated: true, completion: nil)
+        guard let fullName = fullNameTextField.text, fullName != "" else {
+            present(Utils.createAlert(title: "Login Error", message: "Please provide your name"), animated: true, completion: nil)
             return
         }
         
-        guard let email = emailTextField.text where email != "" && Utils.isValidEmail(email) else {
-            presentViewController(Utils.createAlert("Login Error", message: "Please provide a valid email address"), animated: true, completion: nil)
+        guard let email = emailTextField.text, email != "" && Utils.isValidEmail(testStr: email) else {
+            present(Utils.createAlert(title: "Login Error", message: "Please provide a valid email address"), animated: true, completion: nil)
             return
         }
         
-        guard let password = passwordTextField.text where password != "" else {
-            presentViewController(Utils.createAlert("Login Error", message: "Please provide a password"), animated: true, completion: nil)
+        guard let password = passwordTextField.text, password != "" else {
+            present(Utils.createAlert(title: "Login Error", message: "Please provide a password"), animated: true, completion: nil)
             return
         }
         
-        guard let confirm = confirmTextField.text where password == confirm else {
-            presentViewController(Utils.createAlert("Login Error", message: "Passwords do not match"), animated: true, completion: nil)
+        guard let confirm = confirmTextField.text, password == confirm else {
+            present(Utils.createAlert(title: "Login Error", message: "Passwords do not match"), animated: true, completion: nil)
             return
         }
         
-        MBProgressHUD.showHUDAddedTo(view, animated: true)
+        MBProgressHUD.showAdded(to: view, animated: true)
         
         let user = User(email: email, password: password, fullName: fullName)
-        UserStore.shared.register(user) { (success, error) in
-            MBProgressHUD.hideHUDForView(self.view, animated: true)
+        UserStore.shared.register(registerUser: user) { (success, error) in
+            MBProgressHUD.hide(for: self.view, animated: true)
             if success {
-                self.dismissViewControllerAnimated(true, completion: nil)
+                self.dismiss(animated: true, completion: nil)
             } else if let error = error {
-                self.presentViewController(Utils.createAlert(message: error), animated: true, completion: nil)
+                self.present(Utils.createAlert(message: error), animated: true, completion: nil)
             } else {
-                self.presentViewController(Utils.createAlert(message: Constants.JSON.unknownError), animated: true, completion: nil)
+                self.present(Utils.createAlert(message: Constants.JSON.unknownError), animated: true, completion: nil)
             }
         }
     }
