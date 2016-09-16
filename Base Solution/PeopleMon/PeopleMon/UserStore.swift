@@ -38,7 +38,7 @@ class UserStore {
     func register(registerUser: User, completion:@escaping (_ success: Bool, _ error: String?) -> Void) {
         WebServices.shared.registerUser(registerUser) { (user, error) -> () in
             if let _ = user {
-                registerUser.requestType = User.RequestType.Login
+                registerUser.requestType = User.RequestType.login
                 self.login(loginUser: registerUser, completion: { (success, error) in
                     completion(success, error)
                 })
@@ -49,7 +49,7 @@ class UserStore {
     }
     
     func getUserInfo(infoUser: User, completion:@escaping (_ success: Bool, _ error: String?) -> Void) {
-        infoUser.requestType = User.RequestType.UserInfo
+        infoUser.requestType = User.RequestType.userInfo
         WebServices.shared.getObject(infoUser) { (user, error) in
             if let user = user {
                 self.user = user
@@ -62,7 +62,7 @@ class UserStore {
     
     func logout(completion:@escaping () -> Void) {
         let logoutUser = User()
-        logoutUser.requestType = User.RequestType.Logout
+        logoutUser.requestType = User.RequestType.logout
         WebServices.shared.postObject(logoutUser) { (object, error) in
             WebServices.shared.clearUserAuthToken()
             completion()

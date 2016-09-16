@@ -20,20 +20,20 @@ class Person: NetworkModel {
     var created: String?
     var radius: Double?
     
-    var requestType: RequestType = .Nearby
+    var requestType: RequestType = .nearby
     
     enum RequestType {
-        case Nearby
-        case CheckIn
-        case Catch
-        case Caught
+        case nearby
+        case checkIn
+        case catchPerson
+        case caught
     }
     
     init() {
-        requestType = .Caught
+        requestType = .caught
     }
     
-    required init(json: JSON) {
+    required init(json: JSON) throws {
         self.userId = try? json.getString(at: Constants.Person.userId)
         self.username = try? json.getString(at: Constants.Person.userName)
         self.avatar = try? json.getString(at: Constants.Person.avatar)
@@ -43,25 +43,25 @@ class Person: NetworkModel {
     }
     
     init(radius: Double) {
-        self.requestType = .Nearby
+        self.requestType = .nearby
         self.radius = radius
     }
     
     init(coordinate: CLLocationCoordinate2D) {
-        self.requestType = .CheckIn
+        self.requestType = .checkIn
         self.latitude = coordinate.latitude
         self.longitude = coordinate.longitude
     }
     
     init(userId: String, radius: Double) {
-        self.requestType = .Catch
+        self.requestType = .catchPerson
         self.userId = userId
         self.radius = radius
     }
     
     func method() -> Alamofire.HTTPMethod {
         switch requestType {
-        case .Nearby, .Caught:
+        case .nearby, .caught:
             return .get
         default:
             return .post
@@ -70,13 +70,13 @@ class Person: NetworkModel {
     
     func path() -> String {
         switch requestType {
-        case .Nearby:
+        case .nearby:
             return "/v1/User/Nearby"
-        case .CheckIn:
+        case .checkIn:
             return "/v1/User/CheckIn"
-        case .Catch:
+        case .catchPerson:
             return "/v1/User/Catch"
-        case .Caught:
+        case .caught:
             return "/v1/User/Caught"
         }
     }
@@ -85,15 +85,15 @@ class Person: NetworkModel {
         var params: [String: AnyObject] = [:]
         
         switch requestType {
-        case .Nearby:
+        case .nearby:
             params[Constants.Person.radius] = radius as AnyObject?
-        case .CheckIn:
+        case .checkIn:
             params[Constants.Person.latitude] = latitude as AnyObject?
             params[Constants.Person.longitude] = longitude as AnyObject?
-        case .Catch:
+        case .catchPerson:
             params[Constants.Person.caughtUserId] = userId as AnyObject?
             params[Constants.Person.radius] = radius as AnyObject?
-        case .Caught:
+        case .caught:
             break
         }
         

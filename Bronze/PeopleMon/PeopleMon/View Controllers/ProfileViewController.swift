@@ -20,7 +20,13 @@ class ProfileViewController: UIViewController {
         if let user = UserStore.shared.user {
             nameField.text = user.fullName
             emailLabel.text = user.email
-            avatar.image = Utils.imageFromString(user.avatar)
+            
+            if let image = Utils.imageFromString(imageString: user.avatar) {
+                avatar.image = image
+            } else {
+                avatar.image = Images.Avatar.image()
+            }
+            avatar.setupView(size: 80)
         }
     }
 
@@ -31,26 +37,26 @@ class ProfileViewController: UIViewController {
     @IBAction func getPicture(sender: AnyObject) {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.sourceType = .PhotoLibrary
+        imagePicker.sourceType = .photoLibrary
         imagePicker.allowsEditing = true
-        presentViewController(imagePicker, animated: true, completion: nil)
+        present(imagePicker, animated: true, completion: nil)
     }
     
     @IBAction func saveProfile(sender: AnyObject) {
-        guard let name = nameField.text where name != "" else {
-            self.presentViewController(Utils.createAlert(message: "You must provide a name"), animated: true, completion: nil)
+        guard let name = nameField.text, name != "" else {
+            self.present(Utils.createAlert(message: "You must provide a name"), animated: true, completion: nil)
             return
         }
         
-        let resizedImage = Utils.resizeImage(avatar.image!, maxSize: Constants.serverImageSize)
-        let imageString = Utils.stringFromImage(resizedImage)
+        let resizedImage = Utils.resizeImage(image: avatar.image!, maxSize: Constants.serverImageSize)
+        let imageString = Utils.stringFromImage(image: resizedImage)
         let user = User(fullName: name, avatar: imageString)
         
-        MBProgressHUD.showHUDAddedTo(view, animated: true)
+        MBProgressHUD.showAdded(to: view, animated: true)
         WebServices.shared.postObject(user) { (updatedUser, error) in
-            MBProgressHUD.hideHUDForView(self.view, animated: true)
+            MBProgressHUD.hide(for: self.view, animated: true)
             if let error = error {
-                self.presentViewController(Utils.createAlert(message: error), animated: true, completion: nil)
+                self.present(Utils.createAlert(message: error), animated: true, completion: nil)
             } else {
                 UserStore.shared.user?.fullName = name
                 UserStore.shared.user?.avatar = imageString
@@ -60,14 +66,14 @@ class ProfileViewController: UIViewController {
 }
 
 extension ProfileViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        picker.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        picker.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        picker.dismiss(animated: true, completion: nil)
         if let image = info["UIImagePickerControllerEditedImage"] as? UIImage {
-            let resizedImage = Utils.resizeImage(image, maxSize: Constants.serverImageSize)
+            let resizedImage = Utils.resizeImage(image: image, maxSize: Constants.serverImageSize)
             avatar.image = resizedImage
         }
     }

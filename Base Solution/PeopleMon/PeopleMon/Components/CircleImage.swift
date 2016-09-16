@@ -9,23 +9,9 @@
 import UIKit
 
 class CircleImage: UIImageView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.setupView()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        self.setupView()
-    }
-    
-    override func awakeFromNib() {
-        self.setupView()
-    }
-    
-    private func setupView() {
-        let height = self.frame.height / 2.0
-        let width = self.frame.width / 2.0
+    func setupView(size: CGFloat) {
+        let height = size / 2.0
+        let width = size / 2.0
         self.layer.cornerRadius = min(height,width)
         self.clipsToBounds = true
     }

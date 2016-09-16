@@ -15,7 +15,7 @@ class MapPin: NSObject, MKAnnotation {
     
     init(person: Person) {
         self.person = person
-        if let lat = person.latitude, long = person.longitude {
+        if let lat = person.latitude, let long = person.longitude {
             self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
         } else {
             self.coordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0)

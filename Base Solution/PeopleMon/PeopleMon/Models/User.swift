@@ -18,7 +18,7 @@ class User: NetworkModel {
     var password: String?
     var apiKey: String?
     
-    var hasRegistered = false
+    var hasRegistered: Bool?
     var loginProvider: String?
     var latitude: Double?
     var longitude: Double?
@@ -26,18 +26,18 @@ class User: NetworkModel {
     var token: String?
     var expirationDate: String?
     
-    var requestType: RequestType = .Login
+    var requestType: RequestType = .login
     
     enum RequestType {
-        case Login
-        case Register
-        case Logout
-        case UserInfo
-        case UpdateProfile
+        case login
+        case register
+        case logout
+        case userInfo
+        case updateProfile
     }
     
     init() {
-        requestType = .UserInfo
+        requestType = .userInfo
     }
     
     required init(json: JSON) throws {
@@ -46,7 +46,7 @@ class User: NetworkModel {
         
         id = try? json.getString(at: Constants.User.id)
         email = try? json.getString(at: Constants.User.email)
-        hasRegistered = try! json.getBool(at: Constants.User.hasRegistered)
+        hasRegistered = try? json.getBool(at: Constants.User.hasRegistered)
         loginProvider = try? json.getString(at: Constants.User.loginProvider)
         fullName = try? json.getString(at: Constants.User.fullName)
         avatar = try? json.getString(at: Constants.User.avatarBase64)
@@ -57,7 +57,7 @@ class User: NetworkModel {
     init(email: String, password: String) {
         self.email = email
         self.password = password
-        requestType = .Login
+        requestType = .login
     }
     
     init(email: String, password: String, fullName: String) {
@@ -65,18 +65,18 @@ class User: NetworkModel {
         self.password = password
         self.fullName = fullName
         self.apiKey = Constants.apiKey
-        requestType = .Register
+        requestType = .register
     }
     
     init(fullName: String, avatar: String) {
         self.fullName = fullName
         self.avatar = avatar
-        requestType = .UpdateProfile
+        requestType = .updateProfile
     }
     
     func method() -> Alamofire.HTTPMethod {
         switch requestType {
-        case .UserInfo:
+        case .userInfo:
             return .get
         default:
             return .post
@@ -85,13 +85,13 @@ class User: NetworkModel {
     
     func path() -> String {
         switch requestType {
-        case .Login:
+        case .login:
             return "/token"
-        case .Register:
+        case .register:
             return "/api/Account/Register"
-        case .Logout:
+        case .logout:
             return "/api/Account/Logout"
-        case .UserInfo, .UpdateProfile:
+        case .userInfo, .updateProfile:
             return "/api/Account/UserInfo"
         }
     }
@@ -100,17 +100,17 @@ class User: NetworkModel {
         var params: [String: AnyObject] = [:]
         
         switch requestType {
-        case .Register:
+        case .register:
             params[Constants.User.email] = email as AnyObject?
             params[Constants.User.fullName] = fullName as AnyObject?
             params[Constants.User.profileImage] = avatar as AnyObject?
             params[Constants.User.apiKey] = self.apiKey as AnyObject?
             params[Constants.User.password] = password as AnyObject?
-        case .Login:
+        case .login:
             params[Constants.User.username] = email as AnyObject?
             params[Constants.User.password] = password as AnyObject?
             params[Constants.User.grantType] = Constants.User.password as AnyObject?
-        case .UpdateProfile:
+        case .updateProfile:
             params[Constants.User.fullName] = fullName as AnyObject?
             params[Constants.User.avatarBase64] = avatar as AnyObject?
         default:

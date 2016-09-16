@@ -10,7 +10,7 @@ import UIKit
 import AFDateHelper
 
 class PersonCell: UITableViewCell {
-    @IBOutlet weak var avatar: UIImageView!
+    @IBOutlet weak var avatar: CircleImage!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     
@@ -24,10 +24,12 @@ class PersonCell: UITableViewCell {
             let date = Date(fromString: createdDate, format: .iso8601(nil))
             dateLabel.text = date.toString(.custom("M/d/yyyy h:m:s a"))
         }
+        
         if let image = Utils.imageFromString(imageString: person.avatar) {
             avatar.image = image
         } else {
             avatar.image = Images.Avatar.image()
         }
+        avatar.setupView(size: 60)
     }
 }

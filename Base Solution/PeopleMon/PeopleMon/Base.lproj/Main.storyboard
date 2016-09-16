@@ -20,8 +20,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Kyq-b8-46e">
-                                <frame key="frameInset" width="600" height="600"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Kyq-b8-46e">
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="pdh-H7-lds"/>
                                 </connections>
@@ -38,7 +37,7 @@
                     <navigationItem key="navigationItem" id="k4j-w5-nRU">
                         <barButtonItem key="leftBarButtonItem" image="Logout" id="0My-g6-RI5">
                             <connections>
-                                <action selector="logout:" destination="BYZ-38-t0r" id="Doo-M0-JJH"/>
+                                <action selector="logoutWithSender:" destination="BYZ-38-t0r" id="Ul4-aU-DMh"/>
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
@@ -62,7 +61,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1259" y="367"/>
+            <point key="canvasLocation" x="1258.4000000000001" y="366.56671664167919"/>
         </scene>
         <!--User Profile-->
         <scene sceneID="mNY-Un-ffT">
@@ -76,21 +75,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j3M-xw-2WX" customClass="CircleImage" customModule="PeopleMon" customModuleProvider="target">
-                                <frame key="frameInset" minX="260" minY="72" width="80" height="80"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Avatar" translatesAutoresizingMaskIntoConstraints="NO" id="j3M-xw-2WX" customClass="CircleImage" customModule="PeopleMon" customModuleProvider="target">
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="1xF-qA-gH8"/>
                                     <constraint firstAttribute="width" constant="80" id="Y4X-rx-0hS"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="may-8U-rQu">
-                                <frame key="frameInset" minX="260" minY="72" width="80" height="80"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="may-8U-rQu">
                                 <connections>
-                                    <action selector="getPicture:" destination="xdz-4e-fL2" eventType="touchUpInside" id="UFf-g3-qCv"/>
+                                    <action selector="getPictureWithSender:" destination="xdz-4e-fL2" eventType="touchUpInside" id="z5e-rv-N2V"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tJz-h9-PN5">
-                                <frame key="frameInset" minX="150" minY="160" width="300" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tJz-h9-PN5">
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="S1R-cK-Zdc"/>
                                     <constraint firstAttribute="width" constant="300" id="XrE-QJ-Xvq"/>
@@ -98,8 +94,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxc-IT-gXc">
-                                <frame key="frameInset" minX="279" minY="198" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxc-IT-gXc">
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -122,12 +117,12 @@
                     <navigationItem key="navigationItem" title="User Profile" id="oTL-p6-V5z">
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="dJR-ur-u6x">
                             <connections>
-                                <action selector="saveProfile:" destination="xdz-4e-fL2" id="Bnn-pw-9jC"/>
+                                <action selector="saveProfileWithSender:" destination="xdz-4e-fL2" id="fzG-51-zfx"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="avatar" destination="j3M-xw-2WX" id="Cyr-vf-ArG"/>
+                        <outlet property="avatar" destination="j3M-xw-2WX" id="vpt-01-llL"/>
                         <outlet property="emailLabel" destination="uxc-IT-gXc" id="InP-vJ-j16"/>
                         <outlet property="nameField" destination="tJz-h9-PN5" id="ee8-Ki-tT9"/>
                     </connections>
@@ -193,10 +188,10 @@
                                 <rect key="frame" x="0.0" y="92" width="375" height="68"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mJr-dc-BT5" id="CYR-hk-FiV">
-                                    <frame key="frameInset" width="375" height="67.5"/>
+                                    <frame key="frameInset" width="375" height="67"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="p3s-qn-gvB" customClass="CircleImage" customModule="PeopleMon" customModuleProvider="target">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Avatar" translatesAutoresizingMaskIntoConstraints="NO" id="p3s-qn-gvB" customClass="CircleImage" customModule="PeopleMon" customModuleProvider="target">
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="60" id="KPM-x0-CKt"/>
                                                 <constraint firstAttribute="height" constant="60" id="c8y-lc-Vhk"/>
@@ -210,8 +205,7 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="120" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ncx-Lb-adf">
-                                            <frame key="frameInset" minX="572" minY="27" width="20" height="15"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="120" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ncx-Lb-adf">
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="afB-w4-bVG"/>
                                             </constraints>
@@ -226,21 +220,14 @@
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="bottom" secondItem="p3s-qn-gvB" secondAttribute="bottom" constant="4" id="EGn-KQ-N12"/>
                                         <constraint firstItem="Ncx-Lb-adf" firstAttribute="centerY" secondItem="CYR-hk-FiV" secondAttribute="centerY" id="Gig-Ph-w49"/>
+                                        <constraint firstItem="p3s-qn-gvB" firstAttribute="centerY" secondItem="CYR-hk-FiV" secondAttribute="centerY" id="JUg-he-smD"/>
                                         <constraint firstItem="lrB-iX-RJi" firstAttribute="centerY" secondItem="CYR-hk-FiV" secondAttribute="centerY" id="QzU-zg-KxY"/>
                                         <constraint firstItem="lrB-iX-RJi" firstAttribute="leading" secondItem="p3s-qn-gvB" secondAttribute="trailing" constant="8" id="Wcd-sx-bBa"/>
-                                        <constraint firstItem="lrB-iX-RJi" firstAttribute="leading" secondItem="p3s-qn-gvB" secondAttribute="trailing" constant="8" id="c4W-1F-2a1"/>
-                                        <constraint firstItem="p3s-qn-gvB" firstAttribute="top" secondItem="CYR-hk-FiV" secondAttribute="top" constant="4" id="cpM-Tl-Z7A"/>
                                         <constraint firstItem="Ncx-Lb-adf" firstAttribute="trailing" secondItem="CYR-hk-FiV" secondAttribute="trailingMargin" id="i9d-Dq-TW6"/>
                                         <constraint firstItem="p3s-qn-gvB" firstAttribute="leading" secondItem="CYR-hk-FiV" secondAttribute="leading" constant="4" id="mqe-a1-167"/>
                                         <constraint firstItem="Ncx-Lb-adf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="lrB-iX-RJi" secondAttribute="trailing" constant="8" id="t1N-0b-ha1"/>
                                     </constraints>
-                                    <variation key="default">
-                                        <mask key="constraints">
-                                            <exclude reference="c4W-1F-2a1"/>
-                                        </mask>
-                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="avatar" destination="p3s-qn-gvB" id="qOr-me-ikM"/>
@@ -257,17 +244,18 @@
                     <navigationItem key="navigationItem" id="JTk-6w-XUQ">
                         <barButtonItem key="leftBarButtonItem" systemItem="done" id="C6S-gZ-DrV">
                             <connections>
-                                <action selector="close:" destination="Vs5-1M-E8g" id="781-z8-9T9"/>
+                                <action selector="closeWithSender:" destination="Vs5-1M-E8g" id="5Zg-pn-TtP"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ckl-cK-h3Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2032" y="-405"/>
+            <point key="canvasLocation" x="2031.2" y="-405.24737631184411"/>
         </scene>
     </scenes>
     <resources>
+        <image name="Avatar" width="150" height="150"/>
         <image name="Caught" width="25" height="25"/>
         <image name="Logout" width="25" height="25"/>
         <image name="Profile" width="25" height="25"/>

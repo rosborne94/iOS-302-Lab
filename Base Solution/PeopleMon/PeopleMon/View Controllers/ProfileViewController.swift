@@ -20,7 +20,13 @@ class ProfileViewController: UIViewController {
         if let user = UserStore.shared.user {
             nameField.text = user.fullName
             emailLabel.text = user.email
-            avatar.image = Utils.imageFromString(imageString: user.avatar)
+            
+            if let image = Utils.imageFromString(imageString: user.avatar) {
+                avatar.image = image
+            } else {
+                avatar.image = Images.Avatar.image()
+            }
+            avatar.setupView(size: 80)
         }
     }
 
@@ -44,7 +50,6 @@ class ProfileViewController: UIViewController {
         
         let resizedImage = Utils.resizeImage(image: avatar.image!)
         let imageString = Utils.stringFromImage(image: resizedImage)
-        print(imageString.characters.count)
         let user = User(fullName: name, avatar: imageString)
         
         MBProgressHUD.showAdded(to: view, animated: true)
@@ -65,7 +70,7 @@ extension ProfileViewController: UINavigationControllerDelegate, UIImagePickerCo
         picker.dismiss(animated: true, completion: nil)
     }
     
-    private func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         picker.dismiss(animated: true, completion: nil)
         if let image = info["UIImagePickerControllerEditedImage"] as? UIImage {
             let resizedImage = Utils.resizeImage(image: image)
