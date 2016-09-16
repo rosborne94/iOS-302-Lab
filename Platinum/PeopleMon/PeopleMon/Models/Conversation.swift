@@ -8,7 +8,7 @@
 
 import Foundation
 import Alamofire
-import SwiftyJSON
+import Freddy
 
 class Conversation: NetworkModel {
     var conversationId: Int?
@@ -26,17 +26,17 @@ class Conversation: NetworkModel {
     
     init() {}
     
-    required init(json: JSON) {
-        conversationId = json[Constants.Conversation.conversationId].int
-        recipientId = json[Constants.Conversation.recipientId].string
-        senderId = json[Constants.Conversation.senderId].string
-        recipientName = json[Constants.Conversation.recipientName].string
-        senderName = json[Constants.Conversation.senderName].string
-        lastMessage = json[Constants.Conversation.lastMessage].string
-        created = json[Constants.Conversation.created].string
-        messageCount = json[Constants.Conversation.messageCount].int
-        recipientAvatar = json[Constants.Conversation.recipientAvatar].string
-        senderAvatar = json[Constants.Conversation.senderAvatar].string
+    required init(json: JSON) throws {
+        conversationId = try? json.getInt(at: Constants.Conversation.conversationId)
+        recipientId = try? json.getString(at: Constants.Conversation.recipientId)
+        senderId = try? json.getString(at: Constants.Conversation.senderId)
+        recipientName = try? json.getString(at: Constants.Conversation.recipientName)
+        senderName = try? json.getString(at: Constants.Conversation.senderName)
+        lastMessage = try? json.getString(at: Constants.Conversation.lastMessage)
+        created = try? json.getString(at: Constants.Conversation.created)
+        messageCount = try? json.getInt(at: Constants.Conversation.messageCount)
+        recipientAvatar = try? json.getString(at: Constants.Conversation.recipientAvatar)
+        senderAvatar = try? json.getString(at: Constants.Conversation.senderAvatar)
     }
     
     init(pageSize: Int, pageNumber: Int) {
@@ -44,8 +44,8 @@ class Conversation: NetworkModel {
         self.pageNumber = pageNumber
     }
     
-    func method() -> Alamofire.Method {
-        return .GET
+    func method() -> Alamofire.HTTPMethod {
+        return .get
     }
     
     func path() -> String {
@@ -55,8 +55,8 @@ class Conversation: NetworkModel {
     func toDictionary() -> [String: AnyObject]? {
         var params: [String: AnyObject] = [:]
         
-        params[Constants.Conversation.pageSize] = pageSize
-        params[Constants.Conversation.pageNumber] = pageNumber
+        params[Constants.Conversation.pageSize] = pageSize as AnyObject?
+        params[Constants.Conversation.pageNumber] = pageNumber as AnyObject?
         
         return params
     }

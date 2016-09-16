@@ -8,7 +8,7 @@
 
 import UIKit
 import Alamofire
-import SwiftyJSON
+import Freddy
 
 class ConversationList: NetworkModel {
     var count: Int?
@@ -22,18 +22,11 @@ class ConversationList: NetworkModel {
     
     init() {}
     
-    required init(json: JSON) {
-        count = json[Constants.ConversationList.count].int
-        recipientName = json[Constants.ConversationList.recipientName].string
-        senderName = json[Constants.ConversationList.senderName].string
-        let messagesJson = json[Constants.ConversationList.messages].array
-        if let messagesJson = messagesJson {
-            messages = []
-            for message in messagesJson {
-                messages?.append(Message(json: message))
-            }
-        }
-        
+    required init(json: JSON) throws {
+        count = try? json.getInt(at: Constants.ConversationList.count)
+        recipientName = try? json.getString(at: Constants.ConversationList.recipientName)
+        senderName = try? json.getString(at: Constants.ConversationList.senderName)
+        messages = try? json.getArray(at: Constants.ConversationList.messages).map(Message.init)
     }
     
     init(id: Int, pageSize: Int, pageNumber: Int) {
@@ -42,8 +35,8 @@ class ConversationList: NetworkModel {
         self.pageNumber = pageNumber
     }
     
-    func method() -> Alamofire.Method {
-        return .GET
+    func method() -> Alamofire.HTTPMethod {
+        return .get
     }
     
     func path() -> String {
@@ -53,9 +46,9 @@ class ConversationList: NetworkModel {
     func toDictionary() -> [String: AnyObject]? {
         var params: [String: AnyObject] = [:]
         
-        params[Constants.ConversationList.id] = id
-        params[Constants.ConversationList.pageSize] = pageSize
-        params[Constants.ConversationList.pageNumber] = pageNumber
+        params[Constants.ConversationList.id] = id as AnyObject?
+        params[Constants.ConversationList.pageSize] = pageSize as AnyObject?
+        params[Constants.ConversationList.pageNumber] = pageNumber as AnyObject?
         
         return params
     }

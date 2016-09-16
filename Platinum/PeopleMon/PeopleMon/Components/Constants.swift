@@ -9,7 +9,10 @@
 import UIKit
 
 struct Constants {
-    static let apiKey = "ios301november2016"
+    public static let keychainIdentifier = "PeoplemonKeychain"
+    public static let authTokenExpireDate = "authTokenExpireDate"
+    public static let authToken = "authToken"
+    static let apiKey = "iOSandroid301november2016"
     static let radius = 100.0
     static let serverImageSize: CGFloat = 80
     static let pinImageSize: CGFloat = 16
@@ -17,12 +20,8 @@ struct Constants {
     static let nearbyRadius = 500.0
     
     struct JSON {
-        static let badRequest = "Bad Request"
         static let unknownError = "An Unknown Error Has Occurred"
-        static let badUsernamePassword = "Invalid Username or Password"
-        static let unauthorized = "Unauthorized"
-        static let objectNotFound = "Object Not Found"
-        static let internalError = "An Internal Server Error Occurred"
+        static let processingError = "There was an error processing the response"
     }
     
     struct User {

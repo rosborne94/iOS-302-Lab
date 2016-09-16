@@ -8,7 +8,7 @@
 
 import Foundation
 import Alamofire
-import SwiftyJSON
+import Freddy
 
 class Message: NetworkModel {
     var recipientId: String?
@@ -22,14 +22,14 @@ class Message: NetworkModel {
     var conversationId: Int?
     init() {}
     
-    required init(json: JSON) {
-        messageId = json[Constants.Message.messageId].int
-        message = json[Constants.Message.message].string
-        created = json[Constants.Message.created].string
-        recipientUserId = json[Constants.Message.recipientUserId].string
-        senderUserId = json[Constants.Message.senderUserId].string
+    required init(json: JSON) throws {
+        messageId = try? json.getInt(at: Constants.Message.messageId)
+        message = try? json.getString(at: Constants.Message.message)
+        created = try? json.getString(at: Constants.Message.created)
+        recipientUserId = try? json.getString(at: Constants.Message.recipientUserId)
+        senderUserId = try? json.getString(at: Constants.Message.senderUserId)
         
-        conversationId = json[Constants.Message.conversationId].int
+        conversationId = try? json.getInt(at: Constants.Message.conversationId)
     }
     
     init(recipientId: String?, message: String) {
@@ -37,8 +37,8 @@ class Message: NetworkModel {
         self.message = message
     }
     
-    func method() -> Alamofire.Method {
-        return .POST
+    func method() -> Alamofire.HTTPMethod {
+        return .post
     }
     
     func path() -> String {
@@ -48,8 +48,8 @@ class Message: NetworkModel {
     func toDictionary() -> [String: AnyObject]? {
         var params: [String: AnyObject] = [:]
         
-        params[Constants.Message.recipientId] = recipientId
-        params[Constants.Message.message] = message
+        params[Constants.Message.recipientId] = recipientId as AnyObject?
+        params[Constants.Message.message] = message as AnyObject?
         
         return params
     }

@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Freddy.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>JSQMessagesViewController.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -34,17 +39,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>SnapKit.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>SwiftKeychainWrapper.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>SwiftyJSON.xcscheme</key>
+		<key>Valet.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -53,6 +48,11 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>1ED4DFAAD25E1999D0244868457A351E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>522C63F3A9C89247F73C6D08A18E07CA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -67,27 +67,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AAC37A23257FF29A989AFA94258FA100</key>
+		<key>8D71500DD62D3B45AA0F085569D90BBB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CB8A11B076B0B10535105BD0AD6481BC</key>
+		<key>E61CE3B6DFA1FE6B3E296965C76C0E10</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D9060A34E8B52BEDE6BC21C3F52229DF</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>DB2B60B8876205A909305D1244102AE9</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>DBA6001481CEA0EBA031CC5C94508FAA</key>
+		<key>EEE4BFE3AC283ECEA2CF60A4C399216A</key>
 		<dict>
 			<key>primary</key>
 			<true/>

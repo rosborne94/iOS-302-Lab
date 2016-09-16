@@ -23,7 +23,7 @@ class ConversationTableViewController: UITableViewController, SegueHandlerType {
         super.viewDidLoad()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let getConversations = Conversation(pageSize: 100, pageNumber: 0)
         WebServices.shared.getObjects(getConversations) { (objects, error) in
@@ -52,16 +52,16 @@ class ConversationTableViewController: UITableViewController, SegueHandlerType {
     
     
     // MARK: - Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        switch  segueIdentifierForSegue(segue) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch  segueIdentifierForSegue(segue: segue) {
         case .OpenConversation:
-            let destVC = segue.destinationViewController as! ConversationViewController
+            let destVC = segue.destination as! ConversationViewController
             let cell = sender as! ConversationCell
             destVC.conversation = cell.conversation
             destVC.senderId = UserStore.shared.user!.id!
             destVC.senderDisplayName = ""
         case .NewConversation:
-            let destVC = segue.destinationViewController as! ConversationViewController
+            let destVC = segue.destination as! ConversationViewController
             let conversation = Conversation()
             conversation.recipientId = selectedPerson?.userId
             conversation.senderId = UserStore.shared.user!.id!
@@ -69,48 +69,48 @@ class ConversationTableViewController: UITableViewController, SegueHandlerType {
             destVC.senderId = UserStore.shared.user!.id!
             destVC.senderDisplayName = ""
         case .SelectUser:
-            let destVC = segue.destinationViewController as! SelectUserViewController
+            let destVC = segue.destination as! SelectUserViewController
             destVC.people = newUsers
         }
     }
     
 
     // MARK: - Table view data source
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return conversations.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(String(ConversationCell)) as! ConversationCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ConversationCell.self)) as! ConversationCell
         
         let conversation = conversations[indexPath.row]
-        cell.setupCell(conversation)
+        cell.setupCell(conversation: conversation)
         
         return cell
     }
     
     // MARK: - IBActions
     @IBAction func setNewConversationUser(segue: UIStoryboardSegue) {
-        dispatch_after(1, dispatch_get_main_queue()) { () -> Void in
-            self.performSegueWithIdentifier(.NewConversation, sender: self)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.performSegueWithIdentifier(segueIdentifier: .NewConversation, sender: self)
         }
     }
 }
 
 extension ConversationTableViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return newUsers.count
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return newUsers[row].username
     }
 }

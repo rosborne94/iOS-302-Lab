@@ -8,12 +8,12 @@
 
 import Foundation
 import Alamofire
-import SwiftyJSON
+import Freddy
 
-protocol NetworkModel {
-    init(json: JSON)
+protocol NetworkModel: JSONDecodable {
+    init(json: JSON) throws
     
-    func method() -> Alamofire.Method
+    func method() -> Alamofire.HTTPMethod
     func path() -> String
     func toDictionary() -> [String: AnyObject]?
 }

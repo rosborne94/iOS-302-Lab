@@ -16,7 +16,7 @@ class ConversationViewController: JSQMessagesViewController {
     var outgoingBubbleImageView: JSQMessagesBubbleImage!
     var incomingBubbleImageView: JSQMessagesBubbleImage!
     
-    var timer: NSTimer?
+    var timer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,27 +24,27 @@ class ConversationViewController: JSQMessagesViewController {
         setupBubbles()
         
         // No avatars
-        collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSizeZero
-        collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero
+        collectionView!.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
+        collectionView!.collectionViewLayout.outgoingAvatarViewSize = CGSize.zero
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         getMessages()
-        timer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: #selector(getMessages), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(getMessages), userInfo: nil, repeats: true)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         timer?.invalidate()
         timer = nil
     }
     
     func getMessages() {
-        if let conversation = conversation, conversationId = conversation.conversationId {
+        if let conversation = conversation, let conversationId = conversation.conversationId {
             let conversationList = ConversationList(id: conversationId, pageSize: 100, pageNumber: 0)
             WebServices.shared.getObject(conversationList) { (object, error) in
-                if let object = object, serverMessages = object.messages {
+                if let object = object, let serverMessages = object.messages {
                     self.messages = []
                     for message in serverMessages {
                         self.messages.append(JSQMessage(senderId: message.senderUserId!, displayName: "", text: message.message!))
@@ -57,8 +57,8 @@ class ConversationViewController: JSQMessagesViewController {
     
     private func setupBubbles() {
         let bubbleImageFactory = JSQMessagesBubbleImageFactory()
-        outgoingBubbleImageView = bubbleImageFactory.outgoingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleBlueColor())
-        incomingBubbleImageView = bubbleImageFactory.incomingMessagesBubbleImageWithColor(UIColor.jsq_messageBubbleLightGrayColor())
+        outgoingBubbleImageView = bubbleImageFactory?.outgoingMessagesBubbleImage(with: UIColor.jsq_messageBubbleBlue())
+        incomingBubbleImageView = bubbleImageFactory?.incomingMessagesBubbleImage(with: UIColor.jsq_messageBubbleLightGray())
     }
 
     override func didReceiveMemoryWarning() {
@@ -66,9 +66,9 @@ class ConversationViewController: JSQMessagesViewController {
         
     }
 
-    override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
+    override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!) {
         if text == "" {
-            presentViewController(Utils.createAlert(message: "You must provide a message text"), animated: true, completion: nil)
+            present(Utils.createAlert(message: "You must provide a message text"), animated: true, completion: nil)
             return
         }
         
@@ -76,7 +76,7 @@ class ConversationViewController: JSQMessagesViewController {
         let message = Message(recipientId: recipientId, message: text)
         WebServices.shared.postObject(message) { (object, error) in
             if let error = error {
-                self.presentViewController(Utils.createAlert(message: error), animated: true, completion: nil)
+                self.present(Utils.createAlert(message: error), animated: true, completion: nil)
             } else {
                 if let object = object {
                     self.conversation?.conversationId = object.conversationId
@@ -87,15 +87,15 @@ class ConversationViewController: JSQMessagesViewController {
         }
     }
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, messageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageData! {
+    override func collectionView(_ collectionView: JSQMessagesCollectionView!, messageDataForItemAt indexPath: IndexPath!) -> JSQMessageData! {
         return messages[indexPath.item]
     }
     
-    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return messages.count
     }
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageBubbleImageDataSource! {
+    override func collectionView(_ collectionView: JSQMessagesCollectionView!, messageBubbleImageDataForItemAt indexPath: IndexPath!) -> JSQMessageBubbleImageDataSource! {
         let message = messages[indexPath.item]
         if message.senderId == senderId {
             return outgoingBubbleImageView
@@ -104,21 +104,21 @@ class ConversationViewController: JSQMessagesViewController {
         }
     }
     
-    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = super.collectionView(collectionView, cellForItemAtIndexPath: indexPath) as! JSQMessagesCollectionViewCell
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = super.collectionView(collectionView, cellForItemAt: indexPath) as! JSQMessagesCollectionViewCell
         
         let message = messages[indexPath.item]
         
         if message.senderId == senderId {
-            cell.textView!.textColor = UIColor.whiteColor()
+            cell.textView!.textColor = UIColor.white
         } else {
-            cell.textView!.textColor = UIColor.blackColor()
+            cell.textView!.textColor = UIColor.black
         }
         
         return cell
     }
     
-    override func collectionView(collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageAvatarImageDataSource! {
+    override func collectionView(_ collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAt indexPath: IndexPath!) -> JSQMessageAvatarImageDataSource! {
         return nil
     }
 }
