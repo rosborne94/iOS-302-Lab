@@ -4,10 +4,9 @@ platform :ios, '9.0'
 use_frameworks!
 
 target 'PeopleMon' do
-pod 'Alamofire'
-pod 'SwiftyJSON'
-pod 'SwiftKeychainWrapper'
-pod 'MBProgressHUD'
-pod 'SnapKit'
-pod 'AFDateHelper'
+    pod 'Alamofire', '~> 4.0'
+    pod 'Freddy', :git => 'https://github.com/bignerdranch/Freddy.git', :branch => 'swift3'
+    pod 'Valet', :git => 'https://github.com/square/Valet.git', :branch => 'develop/3.0'
+    pod 'MBProgressHUD', '~> 0.9.1'
+    pod 'AFDateHelper', :git => 'https://github.com/melvitax/AFDateHelper', :tag => '3.5.0'
 end
